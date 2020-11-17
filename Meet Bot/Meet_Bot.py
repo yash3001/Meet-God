@@ -2,10 +2,11 @@ from selenium import webdriver; import requests
 from selenium.webdriver.support import expected_conditions as when
 from selenium.webdriver.common.by import By as by
 from selenium.webdriver.common.keys import Keys
-import time
+import time; import getpass
 
 USERNAME = ""
 PASSWORD = ""
+MEET_LINK = "https://meet.google.com/qwe-auqz-vpo"
 BROWSER_DRIVER = "/usr/local/bin/geckodriver"
 
 usernameFieldPath = "identifierId"
@@ -27,12 +28,16 @@ def initBrowser():
     firefoxOptions.set_preference("permissions.default.microphone", 2)
     firefoxOptions.set_preference("permissions.default.camera", 2)
     driver = webdriver.Firefox(executable_path=BROWSER_DRIVER, options=firefoxOptions)
-    print(" Success!")
+    print("Success!")
     return(driver)
 
 def login():
     print("\nLogging into Google account...")
     driver.get('https://accounts.google.com/signin')
+
+    global USERNAME, PASSWORD
+    USERNAME = input("Enter your email address: ") if USERNAME == "" else USERNAME
+    PASSWORD = getpass.getpass("Enter your password: ") if PASSWORD == "" else PASSWORD
 
     usernameField = wait.until(when.element_to_be_clickable((by.ID, usernameFieldPath)))
     time.sleep(1)
@@ -54,9 +59,11 @@ def login():
 
 def attendMeet():
     print("\nNavigating to Google Meet...")
-    driver.get("")
     print("Success!")
     print("Entering Google Meet...")
+    global MEET_LINK
+    MEET_LINK = input("Enter the meet link: ") if MEET_LINK == "" else MEET_LINK
+    driver.get(MEET_LINK)
 
     try:
         joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
@@ -109,9 +116,9 @@ if __name__ == "__main__":
         print("Cleaning up and exiting...")
         driver.quit()
 
-    except Exception:
-        print("An error occured")
-        print("Press Enter to exit.")
-        input()
-        print("Cleaning up and exiting...")
-        driver.quit()
+    # except Exception:
+    #     print("An error occured")
+    #     print("Press Enter to exit.")
+    #     input()
+    #     print("Cleaning up and exiting...")
+    #     driver.quit()
