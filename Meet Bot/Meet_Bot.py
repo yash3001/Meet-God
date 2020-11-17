@@ -105,7 +105,8 @@ if __name__ == "__main__":
 
         if len(MEET_LINK) == 0:
             MEET_LINK.append(input("Enter the meet link and time: "))
-        for link in MEET_LINK:            
+        while len(MEET_LINK) != 0:            
+            link = MEET_LINK[0]
             currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
             sleepTime = (int(link.split()[1].split(':')[0]) - currentTime[0])*3600 + (int(link.split()[1].split(':')[1]) - currentTime[1])*60 + (int(link.split()[1].split(':')[2]) - currentTime[2])
             time.sleep(sleepTime)
@@ -113,6 +114,7 @@ if __name__ == "__main__":
             time.sleep(DURATION)
             endMeet()
             print("\n\nMeet completed successfully.")
+            MEET_LINK.pop(0)
 
         print("Press Enter to exit.")
         input()
