@@ -2,11 +2,11 @@ from selenium import webdriver; import requests
 from selenium.webdriver.support import expected_conditions as when
 from selenium.webdriver.common.by import By as by
 from selenium.webdriver.common.keys import Keys
-import time; import getpass
+import time; import getpass; import datetime
 
 USERNAME = ""
 PASSWORD = ""
-MEET_LINK = ""
+MEET_LINK = []
 BROWSER_DRIVER = "/usr/local/bin/geckodriver"
 
 usernameFieldPath = "identifierId"
@@ -61,13 +61,11 @@ def login():
     print("Success!")
 
 
-def attendMeet():
+def attendMeet(link):
     print("\nNavigating to Google Meet...")
     print("Success!")
     print("Entering Google Meet...")
-    global MEET_LINK
-    MEET_LINK = input("Enter the meet link: ") if MEET_LINK == "" else MEET_LINK
-    driver.get(MEET_LINK)
+    driver.get(link)
 
     try:
         joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
@@ -104,10 +102,18 @@ if __name__ == "__main__":
         driver = initBrowser()
         wait = webdriver.support.ui.WebDriverWait(driver, 5)
         login()
-        attendMeet()
-        time.sleep(DURATION)
-        endMeet()
-        print("\n\nMeet completed successfully.")
+
+        if len(MEET_LINK) == 0:
+            MEET_LINK.append(input("Enter the meet link and time: "))
+        for link in MEET_LINK:            
+            currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
+            sleepTime = (int(link.split()[1].split(':')[0]) - currentTime[0])*3600 + (int(link.split()[1].split(':')[1]) - currentTime[1])*60 + (int(link.split()[1].split(':')[2]) - currentTime[2])
+            time.sleep(sleepTime)
+            attendMeet(link.split()[0])
+            time.sleep(DURATION)
+            endMeet()
+            print("\n\nMeet completed successfully.")
+
         print("Press Enter to exit.")
         input()
         print("Cleaning up and exiting...")
