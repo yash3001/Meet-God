@@ -18,7 +18,7 @@ listButtonPath = "/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[6]/div[3]
 endButtonPath = "[aria-label='Leave call']"
 
 def initBrowser():
-    print("\nInitializing browser...", end="")
+    print("Initializing browser...")
     firefoxOptions = webdriver.FirefoxOptions()
     firefoxOptions.add_argument("--width=800"), firefoxOptions.add_argument("--height=800")
     # firefoxOptions.headless = True
@@ -31,7 +31,7 @@ def initBrowser():
     return(driver)
 
 def login():
-    print("Logging into Google account...", end="")
+    print("\nLogging into Google account...")
     driver.get('https://accounts.google.com/signin')
 
     usernameField = wait.until(when.element_to_be_clickable((by.ID, usernameFieldPath)))
@@ -47,15 +47,16 @@ def login():
 
     passwordNextButton = wait.until(when.element_to_be_clickable((by.ID, passwordNextButtonPath)))
     passwordNextButton.click()
+
     time.sleep(3)
-    print(" Success!")
+    print("Success!")
 
 
 def attendMeet():
-    print(f"\n\nNavigating to Google Meet...")
+    print("\nNavigating to Google Meet...")
     driver.get("")
-    print(" Success!")
-    print(f"Entering Google Meet...")
+    print("Success!")
+    print("Entering Google Meet...")
 
     try:
         joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
@@ -64,9 +65,9 @@ def attendMeet():
     time.sleep(1)
     joinButton.click()
 
-    print(" Success!")
+    print("Success!")
     time.sleep(1)
-    print(f"Now attending Google Meet")
+    print("Now attending Google Meet")
 
     try:
         joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))   # For another prompt that pops up for Meets being recorded
@@ -82,7 +83,7 @@ def endMeet():
     time.sleep(1)
     endButton = driver.find_element_by_css_selector(endButtonPath)
     endButton.click()
-    print(f"\nSuccessfully ended Google Meet")
+    print("\nSuccessfully ended Google Meet")
 
 
 if __name__ == "__main__":
@@ -95,22 +96,22 @@ if __name__ == "__main__":
         attendMeet()
         time.sleep(DURATION)
         endMeet()
-        print("\n\nAll Meets completed successfully.")
+        print("\n\nMeet completed successfully.")
         print("Press Enter to exit.")
         input()
-        print("\nCleaning up and exiting...")
+        print("Cleaning up and exiting...")
         driver.quit()
 
     except KeyboardInterrupt:
-        print("\n\nCTRL ^C\n\nThrew a wrench in the works.")
+        print("\n\nCTRL ^C\nThrew a wrench in the works.")
         print("Press Enter to exit.")
         input()
-        print("\nCleaning up and exiting...")
+        print("Cleaning up and exiting...")
         driver.quit()
 
     except Exception:
         print("An error occured")
         print("Press Enter to exit.")
         input()
-        print("\nCleaning up and exiting...")
+        print("Cleaning up and exiting...")
         driver.quit()
