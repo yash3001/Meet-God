@@ -4,9 +4,9 @@ from selenium.webdriver.common.by import By as by
 from selenium.webdriver.common.keys import Keys
 import time
 
-USERNAME = "USERNAME"
-PASSWORD = "PASSWORD"
-BROWSER_DRIVER = "DRIVER_PATH"
+USERNAME = ""
+PASSWORD = ""
+BROWSER_DRIVER = "/usr/local/bin/geckodriver"
 
 usernameFieldPath = "identifierId"
 usernameNextButtonPath = "identifierNext"
@@ -14,6 +14,7 @@ passwordFieldPath = "password"
 passwordNextButtonPath = "passwordNext"
 joinButton1Path = "//span[contains(text(), 'Join')]"
 joinButton2Path = "//span[contains(text(), 'Ask to join')]"
+listButtonPath = "/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[6]/div[3]/div/div[2]/div[3]"
 endButtonPath = "[aria-label='Leave call']"
 
 def initBrowser():
@@ -52,7 +53,7 @@ def login():
 
 def attendMeet():
     print(f"\n\nNavigating to Google Meet...")
-    driver.get("MEET_LINK")
+    driver.get("")
     print(" Success!")
     print(f"Entering Google Meet...")
 
@@ -76,7 +77,7 @@ def attendMeet():
 
 
 def endMeet():
-    list = driver.find_element_by_xpath("/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[6]/div[3]/div/div[2]/div[3]")
+    list = driver.find_element_by_xpath(listButtonPath)
     list.click()
     time.sleep(1)
     endButton = driver.find_element_by_css_selector(endButtonPath)
@@ -97,19 +98,19 @@ if __name__ == "__main__":
         print("\n\nAll Meets completed successfully.")
         print("Press Enter to exit.")
         input()
-        print("\nCleaning up and exiting...", end="")
+        print("\nCleaning up and exiting...")
         driver.quit()
 
     except KeyboardInterrupt:
         print("\n\nCTRL ^C\n\nThrew a wrench in the works.")
         print("Press Enter to exit.")
         input()
-        print("\nCleaning up and exiting...", end="")
+        print("\nCleaning up and exiting...")
         driver.quit()
 
     except Exception:
         print("An error occured")
         print("Press Enter to exit.")
         input()
-        print("\nCleaning up and exiting...", end="")
+        print("\nCleaning up and exiting...")
         driver.quit()
