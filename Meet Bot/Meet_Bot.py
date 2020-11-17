@@ -27,7 +27,11 @@ def initBrowser():
     firefoxOptions.set_preference("browser.privatebrowsing.autostart", True)
     firefoxOptions.set_preference("permissions.default.microphone", 2)
     firefoxOptions.set_preference("permissions.default.camera", 2)
-    driver = webdriver.Firefox(executable_path=BROWSER_DRIVER, options=firefoxOptions)
+    
+    firefoxProfile = webdriver.FirefoxProfile()
+    firefoxProfile.set_preference("media.volume_scale", "0.0")
+    
+    driver = webdriver.Firefox(executable_path=BROWSER_DRIVER, options=firefoxOptions, firefox_profile=firefoxProfile)
     print("Success!")
     return(driver)
 
