@@ -6,7 +6,7 @@ import time; import getpass
 
 USERNAME = ""
 PASSWORD = ""
-MEET_LINK = "https://meet.google.com/qwe-auqz-vpo"
+MEET_LINK = ""
 BROWSER_DRIVER = "/usr/local/bin/geckodriver"
 
 usernameFieldPath = "identifierId"
