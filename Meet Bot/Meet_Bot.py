@@ -16,6 +16,8 @@ passwordNextButtonPath = "passwordNext"
 joinButton1Path = "//span[contains(text(), 'Join')]"
 joinButton2Path = "//span[contains(text(), 'Ask to join')]"
 listButtonPath = "/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[6]/div[3]/div/div[2]/div[3]"
+listButtonCrossPath = "/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[3]/div/div[2]/div[1]/div[2]/div/button"
+studentNumberPath = "/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[3]/div/div[2]/div[2]/div[1]/div[1]/span/div/span[2]"
 endButtonPath = "[aria-label='Leave call']"
 
 def initBrowser():
@@ -76,7 +78,6 @@ def attendMeet(link):
 
     print("Success!")
     time.sleep(1)
-    print("Now attending Google Meet")
 
     try:
         joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))   # For another prompt that pops up for Meets being recorded
@@ -85,9 +86,18 @@ def attendMeet(link):
     except:
         pass
 
+    while True:
+        try:
+            list = driver.find_element_by_xpath(listButtonPath)
+            list.click()
+            break
+        except Exception:
+            time.sleep(1)
+
+    print("Now attending Google Meet")
 
 def endMeet():
-    list = driver.find_element_by_xpath(listButtonPath)
+    list = driver.find_element_by_xpath(listButtonCrossPath)
     list.click()
     time.sleep(1)
     endButton = driver.find_element_by_css_selector(endButtonPath)
@@ -98,7 +108,6 @@ def endMeet():
 if __name__ == "__main__":
 
     try:
-        DURATION = 5
         driver = initBrowser()
         wait = webdriver.support.ui.WebDriverWait(driver, 5)
         login()
@@ -111,8 +120,15 @@ if __name__ == "__main__":
             sleepTime = (int(link.split()[1].split(':')[0]) - currentTime[0])*3600 + (int(link.split()[1].split(':')[1]) - currentTime[1])*60 + (int(link.split()[1].split(':')[2]) - currentTime[2])
             time.sleep(sleepTime)
             attendMeet(link.split()[0])
-            time.sleep(DURATION)
-            endMeet()
+            # time.sleep(1800)
+            while True:
+                numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
+                numPeople = int(str(numPeople[1:-1]))
+                if numPeople < 2:
+                    endMeet()
+                    break
+                else:
+                    time.sleep(5)
             print("\n\nMeet completed successfully.")
             MEET_LINK.pop(0)
 
