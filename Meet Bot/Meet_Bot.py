@@ -181,10 +181,44 @@ def addMeetings():
         meetThread.start()
 
 def modifyMeeting():
+
+    global MEET_LINK, STATUS
+    clrscr()
+    if len(MEET_LINK) > 0:
+        for link, index in enumerate(MEET_LINK):
+            print(f"{index+1}\) {link.split()[0]} at {link.split()[1]}")
+    else:
+        print("No meetings scheduled currently")
+        input("\n\n[Press Enter to go back to main menu]")
+        return
     
+    index = input("Enter the meeting number to modify")
+    index = int(index) - 1
+    clrscr()
+    while True:
+        print(f"The chosen meeting is:\n{MEET_LINK[index].split()[0]} at {MEET_LINK[index].split()[1]}")
+        choice = input("\n\n1: Change the meet link\n2: Change the meet timing\n3: Delete this meeting\nChoice: ")
+        if choice == "1":
+            newLink = input("\nEnter the new link: ").strip()
+            MEET_LINK[index] = newLink + " " + MEET_LINK[index].split()[1]
+        elif choice == "2":
+            newTime = input("\nEnter the new timings: ").strip()
+            MEET_LINK[index] = MEET_LINK[index].split()[0] + " " + newTime
+            if index == 0 and STATUS == "Waiting for next meeting":
+                kill_and_restart_thread
+
+        elif choice == "3":
+            MEET_LINK.pop(index)
+            if index == 0 and STATUS == "Waiting for next meeting":
+                kill_and_restart_thread
+
 
 def sortMeetings():
-    pass
+    global MEET_LINK
+    if len(MEET_LINK) > 1:
+        MEET_LINK = [l.split()[1]+" "+l.split()[0] for l in MEET_LINK]
+        MEET_LINK.sort()
+        MEET_LINK = [l.split()[1]+" "+l.split()[0] for l in MEET_LINK]
 
 def clrscr():
     if os.name == 'posix':
