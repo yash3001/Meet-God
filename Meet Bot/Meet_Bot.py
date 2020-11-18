@@ -9,6 +9,8 @@ PASSWORD = ""
 MEET_LINK = []
 BROWSER_DRIVER = "/usr/local/bin/geckodriver"
 
+LOGS = ""
+
 usernameFieldPath = "identifierId"
 usernameNextButtonPath = "identifierNext"
 passwordFieldPath = "password"
@@ -41,9 +43,9 @@ def login():
     print("\nLogging into Google account...")
     driver.get('https://accounts.google.com/signin')
 
-    global USERNAME, PASSWORD
-    USERNAME = input("Enter your email address: ") if USERNAME == "" else USERNAME
-    PASSWORD = getpass.getpass("Enter your password: ") if PASSWORD == "" else PASSWORD
+    # global USERNAME, PASSWORD
+    # USERNAME = input("Enter your email address: ") if USERNAME == "" else USERNAME
+    # PASSWORD = getpass.getpass("Enter your password: ") if PASSWORD == "" else PASSWORD
 
     usernameField = wait.until(when.element_to_be_clickable((by.ID, usernameFieldPath)))
     time.sleep(1)
@@ -104,38 +106,88 @@ def endMeet():
     endButton.click()
     print("\nSuccessfully ended Google Meet")
 
+def attendThread():
+    global MEET_LINK
+    while len(MEET_LINK) != 0:            
+        link = MEET_LINK[0]
+        currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
+        sleepTime = (int(link.split()[1].split(':')[0]) - currentTime[0])*3600 + (int(link.split()[1].split(':')[1]) - currentTime[1])*60 + (int(link.split()[1].split(':')[2]) - currentTime[2])
+        time.sleep(sleepTime)
+        attendMeet(link.split()[0])
+        # time.sleep(1800)
+        while True:
+            numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
+            numPeople = int(str(numPeople[1:-1]))
+            if numPeople < 2:
+                endMeet()
+                break
+            else:
+                time.sleep(5)
+        print("\n\nMeet completed successfully.")
+        MEET_LINK.pop(0)
+
+    print("Press Enter to exit.")
+    input()
+    print("Cleaning up and exiting...")
+    driver.quit()
+
+def showLogs():
+
 
 if __name__ == "__main__":
+
+    USERNAME = input("Enter the username for gmail account: ") if USERNAME == "" else USERNAME
+    PASSWORD = getpass.getpass("Enter the password for your gmail account: ") if PASSWORD == "" else PASSWORD
+
+    if len(MEET_LINK) == 0:
+        print("Enter the meet schedule")
+        flag = 'y'
+        while flag.lower() == "y" or flag.lower() == "yes":
+            url = input("Enter the meeting url")
+            timming = input("Enter the time for joining in 24 hour format (HH:MM:SS): ")
+            MEET_LINK.append(url.strip()+" "+timming.strip())
+            flag = input("Add new meeting? (y/N): ")
 
     try:
         driver = initBrowser()
         wait = webdriver.support.ui.WebDriverWait(driver, 5)
         login()
+        meetThread = threading.Thread(target=attendThread)
+        meetThread.start()
 
-        if len(MEET_LINK) == 0:
-            MEET_LINK.append(input("Enter the meet link and time: "))
-        while len(MEET_LINK) != 0:            
-            link = MEET_LINK[0]
-            currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
-            sleepTime = (int(link.split()[1].split(':')[0]) - currentTime[0])*3600 + (int(link.split()[1].split(':')[1]) - currentTime[1])*60 + (int(link.split()[1].split(':')[2]) - currentTime[2])
-            time.sleep(sleepTime)
-            attendMeet(link.split()[0])
-            # time.sleep(1800)
-            while True:
-                numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
-                numPeople = int(str(numPeople[1:-1]))
-                if numPeople < 2:
-                    endMeet()
-                    break
-                else:
-                    time.sleep(5)
-            print("\n\nMeet completed successfully.")
-            MEET_LINK.pop(0)
+        # Menu
+        menu = """
+        1: Show Logs
+        2: Show Schedule
+        3: Add more meetings
+        4: Delete an existing meeting
+        5: Update an existing meeting
+        6: Exit and let the meeting continue
+        7: Exit and shutdown the bot
+        """
 
-        print("Press Enter to exit.")
-        input()
-        print("Cleaning up and exiting...")
-        driver.quit()
+        while True:
+            clrscr()
+            ans = input(menu+"\nAnswer: ")
+            if ans == 1:
+                showLogs()
+            elif ans == 2:
+                showSchedule()
+            elif ans == 3:
+                addMeetings()
+            elif ans == 4:
+                modifyMeeting()
+            elif ans == 6:
+                print("Attending the remaining meets")
+                break
+            elif ans == 7:
+                print("Cleaning up and exiting...")
+                driver.quit()
+                exit()
+            else:        exit()
+                print("Wrong input, Try again")
+                time.sleep(1)
+        
 
     except KeyboardInterrupt:
         print("\n\nCTRL ^C\nThrew a wrench in the works.")
