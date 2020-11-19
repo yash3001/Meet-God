@@ -1,0 +1,3 @@
+selenium 	# for web browser-based automation
+datetime 	# for scheduling
+getpass     # to enter password securely
