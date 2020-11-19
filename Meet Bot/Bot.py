@@ -8,7 +8,21 @@ from multiprocessing import Manager
 USERNAME = ""
 PASSWORD = ""
 MEET_LINK = Manager().list([])
-BROWSER_DRIVER = "/usr/local/bin/geckodriver"
+
+BROWSER_DRIVER = ""
+#############################################################
+#                   Google Chrome                           #
+#           Linux: "ChromeDrivers/linux64/chromedriver"     #
+#             Mac: "ChromeDrivers/mac64/chromedriver"       #
+#         Windows: "ChromeDrivers/win32/chromedriver.exe"   #
+#                                                           #
+#                   Mozilla Firefox                         #
+#     Linux (x32): "FirefoxDrivers/linux32/geckodriver"     #
+#     Linux (x64): "FirefoxDrivers/linux64/geckodriver"     #
+#             Mac: "FirefoxDrivers/mac64/geckodriver"       #
+#   Windows (x32): "FirefoxDrivers/win32/geckodriver.exe"   #
+#   Windows (x64): "FirefoxDrivers/win64/geckodriver.exe"   #
+#############################################################
 
 STATUS = Manager().list(["Idol"])
 MENU = """
@@ -34,18 +48,36 @@ endButtonPath = "[aria-label='Leave call']"
 def initBrowser():
     clrscr()
     print("Initializing browser...")
-    firefoxOptions = webdriver.FirefoxOptions()
-    firefoxOptions.add_argument("--width=800"), firefoxOptions.add_argument("--height=800")
-    # firefoxOptions.headless = True
-    firefoxOptions.set_preference("layers.acceleration.disabled", True)
-    firefoxOptions.set_preference("browser.privatebrowsing.autostart", True)
-    firefoxOptions.set_preference("permissions.default.microphone", 2)
-    firefoxOptions.set_preference("permissions.default.camera", 2)
+
+    if BROWSER_DRIVER.lower().startswith("chrome"):
+        chromeOptions = webdriver.ChromeOptions()
+        chromeOptions.add_argument("--disable-infobars")
+        chromeOptions.add_argument("--disable-gpu")
+        chromeOptions.add_argument("--disable-extensions")
+        chromeOptions.add_argument("--window-size=800,800")
+        chromeOptions.add_argument("--incognito")
+        chromeOptions.add_experimental_option('excludeSwitches', ['enable-logging'])
+        chromeOptions.add_experimental_option("prefs", {"profile.default_content_setting_values.media_stream_mic": 2,
+                                                        "profile.default_content_setting_values.media_stream_camera": 2,
+                                                        "profile.default_content_setting_values.notifications": 2
+                                                        })
+        chrome_options.add_argument("--mute-audio")
+
+        driver = webdriver.Chrome(executable_path=BROWSER_DRIVER, options=chromeOptions)
     
-    firefoxProfile = webdriver.FirefoxProfile()
-    # firefoxProfile.set_preference("media.volume_scale", "0.0")
+    elif BROWSER_DRIVER.lower().startswith("firefox"):
+        firefoxOptions = webdriver.FirefoxOptions()
+        firefoxOptions.add_argument("--width=800"), firefoxOptions.add_argument("--height=800")
+        # firefoxOptions.headless = True
+        firefoxOptions.set_preference("layers.acceleration.disabled", True)
+        firefoxOptions.set_preference("browser.privatebrowsing.autostart", True)
+        firefoxOptions.set_preference("permissions.default.microphone", 2)
+        firefoxOptions.set_preference("permissions.default.camera", 2)
     
-    driver = webdriver.Firefox(executable_path=BROWSER_DRIVER, options=firefoxOptions, firefox_profile=firefoxProfile)
+        firefoxProfile = webdriver.FirefoxProfile()
+        firefoxProfile.set_preference("media.volume_scale", "0.0")
+    
+        driver = webdriver.Firefox(executable_path=BROWSER_DRIVER, options=firefoxOptions, firefox_profile=firefoxProfile)
     print("Success!")
     time.sleep(1)
     return(driver)
@@ -309,13 +341,25 @@ if __name__ == "__main__":
         print("Press Enter to exit.")
         input()
         print("Cleaning up and exiting...")
-        driver.quit()
-        meetProcess.terminate()
+        try:
+            driver.quit()
+        except Exception:
+            pass
+        try:
+            meetProcess.terminate()
+        except Exception:
+            pass
 
-    except Exception:
-        print("An error occured")
-        print("Press Enter to exit.")
-        input()
-        print("Cleaning up and exiting...")
-        driver.quit()
-        meetProcess.terminate()
+    # except Exception:
+    #     print("An error occured")
+    #     print("Press Enter to exit.")
+    #     input()
+    #     print("Cleaning up and exiting...")
+    #     try:
+    #         driver.quit()
+    #     except Exception:
+    #         pass
+    #     try:
+    #         meetProcess.terminate()
+    #     except Exception:
+    #         pass
