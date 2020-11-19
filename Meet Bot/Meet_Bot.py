@@ -2,21 +2,22 @@ from selenium import webdriver; import requests
 from selenium.webdriver.support import expected_conditions as when
 from selenium.webdriver.common.by import By as by
 from selenium.webdriver.common.keys import Keys
-import time; import getpass; import datetime; import threading; import os
+import time; import getpass; import datetime; import multiprocessing; import os
+from multiprocessing import Manager
 
 USERNAME = ""
 PASSWORD = ""
-MEET_LINK = []
+MEET_LINK = Manager().list([])
 BROWSER_DRIVER = "/usr/local/bin/geckodriver"
 
-STATUS = "Idol"
+STATUS = Manager().list(["Idol"])
 MENU = """
 1: Show bot status
 2: Show Schedule
 3: Add more meetings
-4: Delete an existing meeting
-5: Update an existing meeting
-6: Exit and shutdown the bot
+4: Update/Delete an existing meeting
+5: Exit and shutdown the bot
+6: Show Processes
 """
 
 usernameFieldPath = "identifierId"
@@ -42,10 +43,11 @@ def initBrowser():
     firefoxOptions.set_preference("permissions.default.camera", 2)
     
     firefoxProfile = webdriver.FirefoxProfile()
-    firefoxProfile.set_preference("media.volume_scale", "0.0")
+    # firefoxProfile.set_preference("media.volume_scale", "0.0")
     
     driver = webdriver.Firefox(executable_path=BROWSER_DRIVER, options=firefoxOptions, firefox_profile=firefoxProfile)
     print("Success!")
+    time.sleep(1)
     return(driver)
 
 def login():
@@ -73,6 +75,7 @@ def login():
 
     time.sleep(3)
     print("Success!")
+    time.sleep(1)
 
 
 def attendMeet(link):
@@ -109,7 +112,7 @@ def attendMeet(link):
             time.sleep(1)
 
     print("\nNow attending Google Meet")
-    STATUS = "Attending meeting"
+    STATUS[0] = "Attending meeting"
     time.sleep(2)
     clrscr()
     print(MENU+"\n"+"Answer: ")
@@ -126,13 +129,12 @@ def endMeet():
     print(MENU+"\n"+"Answer: ")
 
 
-def attendThread():
-    global MEET_LINK, STATUS
+def attendProcess(MEET_LINK, STATUS):
     while len(MEET_LINK) != 0:            
         link = MEET_LINK[0]
         currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
         sleepTime = (int(link.split()[1].split(':')[0]) - currentTime[0])*3600 + (int(link.split()[1].split(':')[1]) - currentTime[1])*60 + (int(link.split()[1].split(':')[2]) - currentTime[2])
-        STATUS = "Waiting for next meeting"
+        STATUS[0] = "Waiting for next meeting"
         time.sleep(sleepTime)
         attendMeet(link.split()[0])
         MEET_LINK.pop(0)
@@ -147,7 +149,7 @@ def attendThread():
                 time.sleep(5)
     clrscr()
     print("\n\nAll Meets completed successfully.")
-    STATUS = "idol"
+    STATUS[0] = "idol"
     time.sleep(2)
     clrscr()
     print(MENU+"\n"+"Answer: ")
@@ -155,21 +157,21 @@ def attendThread():
 def showStatus():
     global STATUS
     clrscr()
-    print(f"The bot is {STATUS}")
+    print(f"The bot is {STATUS[0]}")
     input("\n\nPress Enter to go back to the main menu")
 
 def showSchedule():
     global MEET_LINK
     clrscr()
     if len(MEET_LINK) > 0:
-        for link, index in enumerate(MEET_LINK):
-            print(f"{index+1}\) {link.split()[0]} at {link.split()[1]}")
+        for index, link in enumerate(MEET_LINK):
+            print(f"{index+1}) {link.split()[0]} at {link.split()[1]}")
     else:
         print("No meetings scheduled currently")
     input("\n\n[Press Enter to go back to main menu]")
 
 def addMeetings():
-    global MEET_LINK
+    global MEET_LINK, STATUS, meetProcess
     flag = 'y'
     clrscr()
     while flag.lower() == "y" or flag.lower() == "yes":
@@ -177,41 +179,67 @@ def addMeetings():
         timming = input("Enter the time for joining in 24 hour format (HH:MM:SS): ")
         MEET_LINK.append(url.strip()+" "+timming.strip())
         flag = input("Meeting added successfully.\nAdd new meeting? (y/N): ")
-    if threading.active_count() == 1:
-        meetThread.start()
+    if len(multiprocessing.active_children()) == 2:
+        meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
+        meetProcess.start()
 
 def modifyMeeting():
-
-    global MEET_LINK, STATUS
-    clrscr()
-    if len(MEET_LINK) > 0:
-        for link, index in enumerate(MEET_LINK):
-            print(f"{index+1}\) {link.split()[0]} at {link.split()[1]}")
-    else:
-        print("No meetings scheduled currently")
-        input("\n\n[Press Enter to go back to main menu]")
-        return
+    global MEET_LINK, STATUS, meetProcess
+    choice = '1'
+    while choice != '0':
+        clrscr()
+        print("The current meeting schedule is:\n")
+        if len(MEET_LINK) > 0:
+            for index, link in enumerate(MEET_LINK):
+                print(f"{index+1}) {link.split()[0]} at {link.split()[1]}")
+        else:
+            print("No meetings scheduled currently")
+            input("\n\n[Press Enter to go back to main menu]")
+            return
     
-    index = input("Enter the meeting number to modify")
-    index = int(index) - 1
-    clrscr()
-    while True:
-        print(f"The chosen meeting is:\n{MEET_LINK[index].split()[0]} at {MEET_LINK[index].split()[1]}")
-        choice = input("\n\n1: Change the meet link\n2: Change the meet timing\n3: Delete this meeting\nChoice: ")
-        if choice == "1":
-            newLink = input("\nEnter the new link: ").strip()
-            MEET_LINK[index] = newLink + " " + MEET_LINK[index].split()[1]
-        elif choice == "2":
-            newTime = input("\nEnter the new timings: ").strip()
-            MEET_LINK[index] = MEET_LINK[index].split()[0] + " " + newTime
-            if index == 0 and STATUS == "Waiting for next meeting":
-                kill_and_restart_thread
+        index = input("\n\nEnter the meeting number to modify: ")
+        index = int(index) - 1
+        while True:
+            clrscr()
+            print(f"The chosen meeting is:\n{MEET_LINK[index].split()[0]} at {MEET_LINK[index].split()[1]}")
+            choice = input("\n\n1: Change the meet link\n2: Change the meet timing\n3: Delete this meeting\n\nChoice: ")
+            if choice == "1":
+                newLink = input("\nEnter the new link: ").strip()
+                MEET_LINK[index] = newLink + " " + MEET_LINK[index].split()[1]
+                break
+            elif choice == "2":
+                newTime = input("\nEnter the new timings: ").strip()
+                MEET_LINK[index] = MEET_LINK[index].split()[0] + " " + newTime
+                if index == 0 and STATUS[0] == "Waiting for next meeting":
+                    meetProcess.terminate()
+                    time.sleep(0.1)
+                    meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
+                    meetProcess.start()
+                break
 
-        elif choice == "3":
-            MEET_LINK.pop(index)
-            if index == 0 and STATUS == "Waiting for next meeting":
-                kill_and_restart_thread
+            elif choice == "3":
+                MEET_LINK.pop(index)
+                if index == 0 and STATUS[0] == "Waiting for next meeting":
+                    meetProcess.terminate()
+                    time.sleep(0.1)
+                    meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
+                    meetProcess.start()
+                break
 
+            else:
+                print("\nWrong input, try again")
+                time.sleep(1)
+
+        clrscr()
+        print("The updated meeting schedule is:\n")
+        if len(MEET_LINK) > 0:
+            for index, link in enumerate(MEET_LINK):
+                print(f"{index+1}) {link.split()[0]} at {link.split()[1]}")
+        else:
+            print("No meetings scheduled currently")
+    
+        choice = input("\n\n0: go back to main menu.\n1: Keep modifying more meetings")
+    
 
 def sortMeetings():
     global MEET_LINK
@@ -225,6 +253,12 @@ def clrscr():
         _ = os.system('clear')
     else:
         _ = os.system('cls')
+
+def showProcesses():
+    clrscr()
+    print(len(multiprocessing.active_children()))
+    print(multiprocessing.active_children())
+    input("\n\nEnter to continue")
 
 
 if __name__ == "__main__":
@@ -240,8 +274,8 @@ if __name__ == "__main__":
         driver = initBrowser()
         wait = webdriver.support.ui.WebDriverWait(driver, 5)
         login()
-        meetThread = threading.Thread(target=attendThread)
-        meetThread.start()
+        meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
+        meetProcess.start()
 
         while True:
             clrscr()
@@ -254,14 +288,19 @@ if __name__ == "__main__":
                 addMeetings()
             elif ans == '4':
                 modifyMeeting()
-            elif ans == '6':
+            elif ans == '5':
                 clrscr()
                 print("Cleaning up and exiting...")
                 driver.quit()
-                exit()
+                meetProcess.terminate()
+                break
+            elif ans == '6':
+                showProcesses()
             else:
                 print("Wrong input, Try again")
                 time.sleep(1)
+
+        meetProcess.join()
         
 
     except KeyboardInterrupt:
@@ -271,10 +310,12 @@ if __name__ == "__main__":
         input()
         print("Cleaning up and exiting...")
         driver.quit()
+        meetProcess.terminate()
 
-    # except Exception:
-    #     print("An error occured")
-    #     print("Press Enter to exit.")
-    #     input()
-    #     print("Cleaning up and exiting...")
-    #     driver.quit()
+    except Exception:
+        print("An error occured")
+        print("Press Enter to exit.")
+        input()
+        print("Cleaning up and exiting...")
+        driver.quit()
+        meetProcess.terminate()
