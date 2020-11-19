@@ -78,6 +78,12 @@ def initBrowser():
         firefoxProfile.set_preference("media.volume_scale", "0.0")
     
         driver = webdriver.Firefox(executable_path=BROWSER_DRIVER, options=firefoxOptions, firefox_profile=firefoxProfile)
+    
+    else:
+        print("\nWrong driver path\nExiting...")
+        time.sleep(1)
+        exit()
+    
     print("Success!")
     time.sleep(1)
     return(driver)
@@ -147,7 +153,7 @@ def attendMeet(link):
     STATUS[0] = "Attending meeting"
     time.sleep(2)
     clrscr()
-    print(MENU+"\n"+"Answer: ")
+    print(MENU+"\n"+"Answer: ", end="")
 
 def endMeet():
     list = driver.find_element_by_xpath(listButtonCrossPath)
@@ -158,7 +164,7 @@ def endMeet():
     clrscr()
     print("\nSuccessfully ended Google Meet")
     time.sleep(2)
-    print(MENU+"\n"+"Answer: ")
+    print(MENU+"\n"+"Answer: ", end="")
 
 
 def attendProcess(MEET_LINK, STATUS):
@@ -167,10 +173,19 @@ def attendProcess(MEET_LINK, STATUS):
         currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
         sleepTime = (int(link.split()[1].split(':')[0]) - currentTime[0])*3600 + (int(link.split()[1].split(':')[1]) - currentTime[1])*60 + (int(link.split()[1].split(':')[2]) - currentTime[2])
         STATUS[0] = "Waiting for next meeting"
-        time.sleep(sleepTime)
+        try:
+            time.sleep(sleepTime)
+        except Exception:
+            clrscr()
+            print("Omiting the next meeting because time is negative")
+            MEET_LINK.pop(0)
+            time.sleep(5)
+            clrscr()
+            print(MENU+"\n"+"Answer: ", end="")
+            continue
         attendMeet(link.split()[0])
         MEET_LINK.pop(0)
-        # time.sleep(1800)
+        time.sleep(1200)
         while True:
             numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
             numPeople = int(str(numPeople[1:-1]))
@@ -184,7 +199,7 @@ def attendProcess(MEET_LINK, STATUS):
     STATUS[0] = "idol"
     time.sleep(2)
     clrscr()
-    print(MENU+"\n"+"Answer: ")
+    print(MENU+"\n"+"Answer: ", end="")
 
 def showStatus():
     global STATUS
@@ -214,6 +229,7 @@ def addMeetings():
     if len(multiprocessing.active_children()) == 2:
         meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
         meetProcess.start()
+    sortMeetings()
 
 def modifyMeeting():
     global MEET_LINK, STATUS, meetProcess
@@ -246,6 +262,7 @@ def modifyMeeting():
                     meetProcess.terminate()
                     time.sleep(0.1)
                     meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
+                    sortMeetings()
                     meetProcess.start()
                 break
 
@@ -270,15 +287,23 @@ def modifyMeeting():
         else:
             print("No meetings scheduled currently")
     
-        choice = input("\n\n0: go back to main menu.\n1: Keep modifying more meetings")
+        choice = input("\n\n0: go back to main menu.\n1: Keep modifying more meetings\nAnswer: ")
     
 
 def sortMeetings():
     global MEET_LINK
     if len(MEET_LINK) > 1:
-        MEET_LINK = [l.split()[1]+" "+l.split()[0] for l in MEET_LINK]
-        MEET_LINK.sort()
-        MEET_LINK = [l.split()[1]+" "+l.split()[0] for l in MEET_LINK]
+        length = len(MEET_LINK)
+        m = []
+        for link in MEET_LINK:
+            m.append(link)
+        m = [l.split()[1]+" "+l.split()[0] for l in m]
+        m.sort()
+        m = [l.split()[1]+" "+l.split()[0] for l in m]
+        for item in m:
+            MEET_LINK.append(item)
+        for _ in range(length):
+            MEET_LINK.pop(0)
 
 def clrscr():
     if os.name == 'posix':
@@ -290,7 +315,7 @@ def showProcesses():
     clrscr()
     print(len(multiprocessing.active_children()))
     print(multiprocessing.active_children())
-    input("\n\nEnter to continue")
+    input("\n\nEnter to continue: ")
 
 
 if __name__ == "__main__":
@@ -301,6 +326,8 @@ if __name__ == "__main__":
     if len(MEET_LINK) == 0:
         print("Enter the meet schedule")
         addMeetings()
+    else:
+        sortMeetings()
 
     try:
         driver = initBrowser()
@@ -325,12 +352,14 @@ if __name__ == "__main__":
                 print("Cleaning up and exiting...")
                 driver.quit()
                 meetProcess.terminate()
+                time.sleep(3)
+                clrscr()
                 break
             elif ans == '6':
                 showProcesses()
             else:
                 print("Wrong input, Try again")
-                time.sleep(1)
+                time.sleep(3)
 
         meetProcess.join()
         
@@ -349,17 +378,21 @@ if __name__ == "__main__":
             meetProcess.terminate()
         except Exception:
             pass
+        time.sleep(3)
+        clrscr()
 
-    # except Exception:
-    #     print("An error occured")
-    #     print("Press Enter to exit.")
-    #     input()
-    #     print("Cleaning up and exiting...")
-    #     try:
-    #         driver.quit()
-    #     except Exception:
-    #         pass
-    #     try:
-    #         meetProcess.terminate()
-    #     except Exception:
-    #         pass
+    except Exception:
+        print("An error occured")
+        print("Press Enter to exit.")
+        input()
+        print("Cleaning up and exiting...")
+        try:
+            driver.quit()
+        except Exception:
+            pass
+        try:
+            meetProcess.terminate()
+        except Exception:
+            pass
+        time.sleep(3)
+        clrscr()
