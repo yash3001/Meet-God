@@ -1,3 +1,7 @@
+#######################
+####### Imports #######
+#######################
+
 from selenium import webdriver; import requests
 from selenium.webdriver.support import expected_conditions as when
 from selenium.webdriver.common.by import By as by
@@ -5,11 +9,18 @@ from selenium.webdriver.common.keys import Keys
 import time; import getpass; import datetime; import multiprocessing; import os
 from multiprocessing import Manager
 
+
+
+################################
+####### Global Variables #######
+################################
+
+# Change these three variables to avoid typing again and again
 USERNAME = ""
 PASSWORD = ""
 MEET_LINK = Manager().list([])
 
-BROWSER_DRIVER = ""
+# Choose the browser driver from the list below
 #############################################################
 #                   Google Chrome                           #
 #           Linux: "ChromeDrivers/linux64/chromedriver"     #
@@ -23,6 +34,7 @@ BROWSER_DRIVER = ""
 #   Windows (x32): "FirefoxDrivers/win32/geckodriver.exe"   #
 #   Windows (x64): "FirefoxDrivers/win64/geckodriver.exe"   #
 #############################################################
+BROWSER_DRIVER = ""
 
 STATUS = Manager().list(["Idol"])
 MENU = """
@@ -45,6 +57,13 @@ listButtonCrossPath = "/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[3]/d
 studentNumberPath = "/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[3]/div/div[2]/div[2]/div[1]/div[1]/span/div/span[2]"
 endButtonPath = "[aria-label='Leave call']"
 
+
+
+####################################
+####### Function definitions #######
+####################################
+
+# To initialize the browser, chrome for chromedriver and firefox for geckodriver
 def initBrowser():
     clrscr()
     print("Initializing browser...")
@@ -88,6 +107,8 @@ def initBrowser():
     time.sleep(1)
     return(driver)
 
+
+# To login into the goggle account
 def login():
     clrscr()
     print("Logging into Google account...")
@@ -116,6 +137,7 @@ def login():
     time.sleep(1)
 
 
+# To navigate to the meeting link and enter the meeting
 def attendMeet(link):
     global STATUS
     clrscr()
@@ -155,6 +177,8 @@ def attendMeet(link):
     clrscr()
     print(MENU+"\n"+"Answer: ", end="")
 
+
+# To exit the meeting after ending
 def endMeet():
     list = driver.find_element_by_xpath(listButtonCrossPath)
     list.click()
@@ -167,6 +191,7 @@ def endMeet():
     print(MENU+"\n"+"Answer: ", end="")
 
 
+# The seperate process that attends the meeting
 def attendProcess(MEET_LINK, STATUS):
     while len(MEET_LINK) != 0:            
         link = MEET_LINK[0]
@@ -201,12 +226,16 @@ def attendProcess(MEET_LINK, STATUS):
     clrscr()
     print(MENU+"\n"+"Answer: ", end="")
 
+
+# To show the bot status
 def showStatus():
     global STATUS
     clrscr()
     print(f"The bot is {STATUS[0]}")
     input("\n\nPress Enter to go back to the main menu")
 
+
+# To print the remaining meetings and their timings
 def showSchedule():
     global MEET_LINK
     clrscr()
@@ -217,6 +246,8 @@ def showSchedule():
         print("No meetings scheduled currently")
     input("\n\n[Press Enter to go back to main menu]")
 
+
+# To add more meetings
 def addMeetings():
     global MEET_LINK, STATUS, meetProcess
     flag = 'y'
@@ -231,6 +262,8 @@ def addMeetings():
         meetProcess.start()
     sortMeetings()
 
+
+# To modify or delete a meeting
 def modifyMeeting():
     global MEET_LINK, STATUS, meetProcess
     choice = '1'
@@ -290,6 +323,7 @@ def modifyMeeting():
         choice = input("\n\n0: go back to main menu.\n1: Keep modifying more meetings\nAnswer: ")
     
 
+# To sort the meetings according to their timings
 def sortMeetings():
     global MEET_LINK
     if len(MEET_LINK) > 1:
@@ -305,18 +339,27 @@ def sortMeetings():
         for _ in range(length):
             MEET_LINK.pop(0)
 
+
+# For clearing the terminal
 def clrscr():
     if os.name == 'posix':
         _ = os.system('clear')
     else:
         _ = os.system('cls')
 
+
+# To show the running processes (for developement purposes)
 def showProcesses():
     clrscr()
     print(len(multiprocessing.active_children()))
     print(multiprocessing.active_children())
     input("\n\nEnter to continue: ")
 
+
+
+#############################
+####### Main function #######
+#############################
 
 if __name__ == "__main__":
 
