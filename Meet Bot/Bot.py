@@ -2,7 +2,7 @@
 ####### Imports #######
 #######################
 
-from selenium import webdriver; import requests
+from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as when
 from selenium.webdriver.common.by import By as by
 from selenium.webdriver.common.keys import Keys
