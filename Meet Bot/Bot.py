@@ -38,14 +38,21 @@ BROWSER_DRIVER = ""
 #############################################################
 
 STATUS = Manager().list(["Idol"])
-MENU = """
+MENU1 = colored("""
+
 1: Show bot status
 2: Show Schedule
 3: Add more meetings
 4: Update/Delete an existing meeting
 5: Exit and shutdown the bot
 6: Show Processes
-"""
+""", 'cyan')
+
+MENU2 = colored("""
+
+Answer: """, 'green')
+
+MENU = MENU1 + MENU2
 
 BANNER1 = colored('''
  ███▄ ▄███▓▓█████ ▓█████▄▄▄█████▓     ▄████  ▒█████  ▓█████▄ 
@@ -59,9 +66,9 @@ BANNER1 = colored('''
        ░      ░  ░   ░  ░                 ░     ░ ░     ░    
                                                       ░''', 'blue')
 BANNER2 = colored('''
-              ------------------------------------
-             |   Meet God : The Google Meet Bot   |
-              ------------------------------------''', 'red')
+           ------------------------------------
+          |   Meet God : The Google Meet Bot   |
+           ------------------------------------''', 'red')
 
 BANNER = BANNER1 + "\n" + BANNER2
 
@@ -85,7 +92,7 @@ endButtonPath = "[aria-label='Leave call']"
 # To initialize the browser, chrome for chromedriver and firefox for geckodriver
 def initBrowser():
     clrscr()
-    print("Initializing browser...")
+    print("Initializing browser... ")
 
     if BROWSER_DRIVER.lower().startswith("chrome"):
         chromeOptions = webdriver.ChromeOptions()
@@ -117,20 +124,25 @@ def initBrowser():
     
         driver = webdriver.Firefox(executable_path=BROWSER_DRIVER, options=firefoxOptions, firefox_profile=firefoxProfile)
     
-    else:
-        print("\nWrong driver path\nExiting...")
-        time.sleep(1)
+    elif len(BROWSER_DRIVER) == 0:
+        print(colored("\nPlease enter the driver path in the source code\nExiting...", 'red'))
+        time.sleep(3)
         exit()
     
-    print("Success!")
-    time.sleep(1)
+    else:
+        print(colored("\nWrong driver path\nExiting...", 'red'))
+        time.sleep(3)
+        exit()
+    
+    print(colored("Success!", 'green'))
+    time.sleep(3)
     return(driver)
 
 
 # To login into the goggle account
 def login():
     clrscr()
-    print("Logging into Google account...")
+    print("Logging into Google account... ")
     driver.get('https://accounts.google.com/signin')
 
     # global USERNAME, PASSWORD
@@ -152,7 +164,7 @@ def login():
     passwordNextButton.click()
 
     time.sleep(3)
-    print("Success!")
+    print(colored("Success!", 'green'))
     time.sleep(1)
 
 
@@ -160,9 +172,9 @@ def login():
 def attendMeet(link):
     global STATUS
     clrscr()
-    print("\nNavigating to Google Meet...")
-    print("Success!")
-    print("Entering Google Meet...")
+    print("\nNavigating to Google Meet... ")
+    print(colored("Success!", 'green'))
+    print("\nEntering Google Meet... ")
     driver.get(link)
 
     try:
@@ -172,7 +184,7 @@ def attendMeet(link):
     time.sleep(1)
     joinButton.click()
 
-    print("Success!")
+    print(colored("Success!", 'green'))
     time.sleep(1)
 
     try:
@@ -190,11 +202,11 @@ def attendMeet(link):
         except Exception:
             time.sleep(1)
 
-    print("\nNow attending Google Meet")
+    print(colored("\nNow attending Google Meet", 'yellow'))
     STATUS[0] = "Attending meeting"
     time.sleep(2)
     clrscr()
-    print(MENU+"\n"+"Answer: ", end="")
+    print(MENU, end="")
 
 
 # To exit the meeting after ending
@@ -205,10 +217,10 @@ def endMeet():
     endButton = driver.find_element_by_css_selector(endButtonPath)
     endButton.click()
     clrscr()
-    print("\nSuccessfully ended Google Meet")
+    print(colored("\nSuccessfully ended Google Meet", 'green'))
     time.sleep(2)
     clrscr()
-    print(MENU+"\n"+"Answer: ", end="")
+    print(MENU, end="")
 
 
 # The seperate process that attends the meeting
@@ -222,11 +234,11 @@ def attendProcess(MEET_LINK, STATUS):
             time.sleep(sleepTime)
         except Exception:
             clrscr()
-            print("Omiting the next meeting because time is negative")
+            print(colored("Omiting the next meeting because time is negative", 'yellow'))
             MEET_LINK.pop(0)
             time.sleep(5)
             clrscr()
-            print(MENU+"\n"+"Answer: ", end="")
+            print(MENU, end="")
             continue
         attendMeet(link.split()[0])
         MEET_LINK.pop(0)
@@ -240,19 +252,19 @@ def attendProcess(MEET_LINK, STATUS):
             else:
                 time.sleep(5)
     clrscr()
-    print("\n\nAll Meets completed successfully.")
+    print(colored("\n\nAll Meets completed successfully.", 'green'))
     STATUS[0] = "idol"
     time.sleep(2)
     clrscr()
-    print(MENU+"\n"+"Answer: ", end="")
+    print(MENU, end="")
 
 
 # To show the bot status
 def showStatus():
     global STATUS
     clrscr()
-    print(f"The bot is {STATUS[0]}")
-    input("\n\n[Press Enter to go back to the main menu] ")
+    print(colored(f"The bot is {STATUS[0]}", 'yellow'))
+    input(colored("\n\n[Press Enter to go back to the main menu] ", 'green'))
 
 
 # To print the remaining meetings and their timings
@@ -261,10 +273,10 @@ def showSchedule():
     clrscr()
     if len(MEET_LINK) > 0:
         for index, link in enumerate(MEET_LINK):
-            print(f"{index+1}) {link.split()[0]} at {link.split()[1]}")
+            print(colored(f"{index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
     else:
-        print("No meetings scheduled currently")
-    input("\n\n[Press Enter to go back to the main menu] ")
+        print(colored("No meetings scheduled currently", 'cyan'))
+    input(colored("\n\n[Press Enter to go back to the main menu] ", 'green'))
 
 
 # To add more meetings
@@ -289,27 +301,27 @@ def modifyMeeting():
     choice = '1'
     while choice != '0':
         clrscr()
-        print("The current meeting schedule is:\n")
+        print(colored("The current meeting schedule is:\n", 'cyan'))
         if len(MEET_LINK) > 0:
             for index, link in enumerate(MEET_LINK):
                 print(f"{index+1}) {link.split()[0]} at {link.split()[1]}")
         else:
-            print("No meetings scheduled currently")
-            input("\n\n[Press Enter to go back to the main menu] ")
+            print(colored("No meetings scheduled currently", 'cyan'))
+            input(colored("\n\n[Press Enter to go back to the main menu] ", 'green'))
             return
     
-        index = input("\n\nEnter the meeting number to modify: ")
+        index = input(colored("\n\nEnter the meeting number to modify: ", 'green'))
         index = int(index) - 1
         while True:
             clrscr()
-            print(f"The chosen meeting is:\n{MEET_LINK[index].split()[0]} at {MEET_LINK[index].split()[1]}")
+            print(colored(f"The chosen meeting is:\n{MEET_LINK[index].split()[0]} at {MEET_LINK[index].split()[1]}", 'cyan'))
             choice = input("\n\n1: Change the meet link\n2: Change the meet timing\n3: Delete this meeting\n\nChoice: ")
             if choice == "1":
-                newLink = input("\nEnter the new link: ").strip()
+                newLink = input(colored("\nEnter the new link: ", 'green')).strip()
                 MEET_LINK[index] = newLink + " " + MEET_LINK[index].split()[1]
                 break
             elif choice == "2":
-                newTime = input("\nEnter the new timings: ").strip()
+                newTime = input(colored("\nEnter the new timings: ", 'green')).strip()
                 MEET_LINK[index] = MEET_LINK[index].split()[0] + " " + newTime
                 if index == 0 and STATUS[0] == "Waiting for next meeting":
                     meetProcess.terminate()
@@ -329,18 +341,18 @@ def modifyMeeting():
                 break
 
             else:
-                print("\nWrong input, try again")
+                print(colored("\nWrong input, try again", 'red'))
                 time.sleep(1)
 
         clrscr()
-        print("The updated meeting schedule is:\n")
+        print(colored("The updated meeting schedule is:\n", 'cyan'))
         if len(MEET_LINK) > 0:
             for index, link in enumerate(MEET_LINK):
-                print(f"{index+1}) {link.split()[0]} at {link.split()[1]}")
+                print(colored(f"{index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
         else:
-            print("No meetings scheduled currently")
+            print(colored("No meetings scheduled currently", 'cyan'))
     
-        choice = input("\n\n0: go back to main menu.\n1: Keep modifying more meetings\nAnswer: ")
+        choice = input(colored("\n\n0: go back to main menu.\n1: Keep modifying more meetings\nAnswer: ", 'green'))
     
 
 # To sort the meetings according to their timings
@@ -412,7 +424,7 @@ if __name__ == "__main__":
 
         while True:
             clrscr()
-            ans = input(MENU+"\nAnswer: ")
+            ans = input(MENU)
             if ans == '1':
                 showStatus()
             elif ans == '2':
@@ -423,7 +435,7 @@ if __name__ == "__main__":
                 modifyMeeting()
             elif ans == '5':
                 clrscr()
-                print("Cleaning up and exiting...")
+                print(colored("Cleaning up and exiting...", 'green'))
                 driver.quit()
                 meetProcess.terminate()
                 time.sleep(3)
@@ -432,7 +444,7 @@ if __name__ == "__main__":
             elif ans == '6':
                 showProcesses()
             else:
-                print("Wrong input, Try again")
+                print(colored("Wrong input, Try again", 'yellow'))
                 time.sleep(3)
 
         meetProcess.join()
@@ -440,10 +452,10 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         clrscr()
-        print("\n\nCTRL ^C\nThrew a wrench in the works.")
-        print("Press Enter to exit.")
+        print(colored("\n\nCTRL ^C\nThrew a wrench in the works.", 'yellow'))
+        print(colored("Press Enter to exit.", 'yellow'))
         input()
-        print("Cleaning up and exiting...")
+        print(colored("Cleaning up and exiting...", 'yellow'))
         try:
             driver.quit()
         except Exception:
@@ -456,10 +468,10 @@ if __name__ == "__main__":
         clrscrAll()
 
     except Exception:
-        print("An error occured")
-        print("Press Enter to exit.")
+        print(colored("An error occured", 'red'))
+        print(colored("Press Enter to exit.", 'red'))
         input()
-        print("Cleaning up and exiting...")
+        print(colored("Cleaning up and exiting...", 'red'))
         try:
             driver.quit()
         except Exception:
