@@ -52,9 +52,9 @@ passwordFieldPath = "password"
 passwordNextButtonPath = "passwordNext"
 joinButton1Path = "//span[contains(text(), 'Join')]"
 joinButton2Path = "//span[contains(text(), 'Ask to join')]"
-listButtonPath = "/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[6]/div[3]/div/div[2]/div[3]"
-listButtonCrossPath = "/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[3]/div/div[2]/div[1]/div[2]/div/button"
-studentNumberPath = "/html/body/div[1]/c-wiz/div[1]/div/div[6]/div[3]/div[3]/div/div[2]/div[2]/div[1]/div[1]/span/div/span[2]"
+listButtonPath = "//div[@aria-label='Chat with everyone']"
+listButtonCrossPath = "//button[@aria-label='Close']"
+studentNumberPath = "//span[@class='rua5Nb']"
 endButtonPath = "[aria-label='Leave call']"
 
 
@@ -188,6 +188,7 @@ def endMeet():
     clrscr()
     print("\nSuccessfully ended Google Meet")
     time.sleep(2)
+    clrscr()
     print(MENU+"\n"+"Answer: ", end="")
 
 
@@ -214,7 +215,7 @@ def attendProcess(MEET_LINK, STATUS):
         while True:
             numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
             numPeople = int(str(numPeople[1:-1]))
-            if numPeople < 2:
+            if numPeople < 20:
                 endMeet()
                 break
             else:
@@ -232,7 +233,7 @@ def showStatus():
     global STATUS
     clrscr()
     print(f"The bot is {STATUS[0]}")
-    input("\n\nPress Enter to go back to the main menu")
+    input("\n\n[Press Enter to go back to the main menu] ")
 
 
 # To print the remaining meetings and their timings
@@ -244,7 +245,7 @@ def showSchedule():
             print(f"{index+1}) {link.split()[0]} at {link.split()[1]}")
     else:
         print("No meetings scheduled currently")
-    input("\n\n[Press Enter to go back to main menu]")
+    input("\n\n[Press Enter to go back to the main menu] ")
 
 
 # To add more meetings
@@ -275,7 +276,7 @@ def modifyMeeting():
                 print(f"{index+1}) {link.split()[0]} at {link.split()[1]}")
         else:
             print("No meetings scheduled currently")
-            input("\n\n[Press Enter to go back to main menu]")
+            input("\n\n[Press Enter to go back to the main menu] ")
             return
     
         index = input("\n\nEnter the meeting number to modify: ")
@@ -353,7 +354,7 @@ def showProcesses():
     clrscr()
     print(len(multiprocessing.active_children()))
     print(multiprocessing.active_children())
-    input("\n\nEnter to continue: ")
+    input("\n\n[Press enter to go back to the main menu] ")
 
 
 
