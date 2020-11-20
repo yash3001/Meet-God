@@ -17,11 +17,11 @@ from termcolor import colored
 ################################
 
 # Change these three variables to avoid typing again and again
-USERNAME = ""
-PASSWORD = ""
-MEET_LINK = Manager().list([])
+USERNAME = "4ni19cs123_b@nie.ac.in"
+PASSWORD = "30012001@Yash"
+MEET_LINK = Manager().list(["https://meet.google.com/gvs-yszv-ika 12:00:00"])
 
-BROWSER_DRIVER = ""
+BROWSER_DRIVER = "FirefoxDrivers/linux64/geckodriver"
 # Choose the browser driver from the list below
 #############################################################
 #                   Google Chrome                           #
@@ -39,14 +39,16 @@ BROWSER_DRIVER = ""
 
 STATUS = Manager().list(["Idol"])
 MENU1 = colored("""
-
-1: Show bot status
-2: Show Schedule
-3: Add more meetings
-4: Update/Delete an existing meeting
-5: Exit and shutdown the bot
-6: Show Processes
-""", 'cyan')
+ --------------------------------------
+|            MAIN MENU                 |
+|--------------------------------------|
+| 1: Show bot status                   |
+| 2: Show Schedule                     |
+| 3: Add more meetings                 |
+| 4: Update/Delete an existing meeting |
+| 5: Exit and shutdown the bot         |
+| 6: Show Processes                    |
+ --------------------------------------""", 'cyan')
 
 MENU2 = colored("""
 
