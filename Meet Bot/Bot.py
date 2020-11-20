@@ -17,11 +17,11 @@ from termcolor import colored
 ################################
 
 # Change these three variables to avoid typing again and again
-USERNAME = "4ni19cs123_b@nie.ac.in"
-PASSWORD = "30012001@Yash"
-MEET_LINK = Manager().list(["https://meet.google.com/gvs-yszv-ika 12:00:00"])
+USERNAME = ""
+PASSWORD = ""
+MEET_LINK = Manager().list([])
 
-BROWSER_DRIVER = "FirefoxDrivers/linux64/geckodriver"
+BROWSER_DRIVER = ""
 # Choose the browser driver from the list below
 #############################################################
 #                   Google Chrome                           #
