@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By as by
 from selenium.webdriver.common.keys import Keys
 import time; import getpass; import datetime; import multiprocessing; import os
 from multiprocessing import Manager
+from termcolor import colored
 
 
 
@@ -20,6 +21,7 @@ USERNAME = ""
 PASSWORD = ""
 MEET_LINK = Manager().list([])
 
+BROWSER_DRIVER = ""
 # Choose the browser driver from the list below
 #############################################################
 #                   Google Chrome                           #
@@ -34,7 +36,6 @@ MEET_LINK = Manager().list([])
 #   Windows (x32): "FirefoxDrivers/win32/geckodriver.exe"   #
 #   Windows (x64): "FirefoxDrivers/win64/geckodriver.exe"   #
 #############################################################
-BROWSER_DRIVER = ""
 
 STATUS = Manager().list(["Idol"])
 MENU = """
@@ -45,6 +46,24 @@ MENU = """
 5: Exit and shutdown the bot
 6: Show Processes
 """
+
+BANNER1 = colored('''
+ ███▄ ▄███▓▓█████ ▓█████▄▄▄█████▓    ▄████▄   ██░ ██ ▓█████ ▄▄▄     ▄▄▄█████▓    ▄▄▄▄    ▒█████  ▄▄▄█████▓
+▓██▒▀█▀ ██▒▓█   ▀ ▓█   ▀▓  ██▒ ▓▒   ▒██▀ ▀█  ▓██░ ██▒▓█   ▀▒████▄   ▓  ██▒ ▓▒   ▓█████▄ ▒██▒  ██▒▓  ██▒ ▓▒
+▓██    ▓██░▒███   ▒███  ▒ ▓██░ ▒░   ▒▓█    ▄ ▒██▀▀██░▒███  ▒██  ▀█▄ ▒ ▓██░ ▒░   ▒██▒ ▄██▒██░  ██▒▒ ▓██░ ▒░
+▒██    ▒██ ▒▓█  ▄ ▒▓█  ▄░ ▓██▓ ░    ▒▓▓▄ ▄██▒░▓█ ░██ ▒▓█  ▄░██▄▄▄▄██░ ▓██▓ ░    ▒██░█▀  ▒██   ██░░ ▓██▓ ░ 
+▒██▒   ░██▒░▒████▒░▒████▒ ▒██▒ ░    ▒ ▓███▀ ░░▓█▒░██▓░▒████▒▓█   ▓██▒ ▒██▒ ░    ░▓█  ▀█▓░ ████▓▒░  ▒██▒ ░ 
+░ ▒░   ░  ░░░ ▒░ ░░░ ▒░ ░ ▒ ░░      ░ ░▒ ▒  ░ ▒ ░░▒░▒░░ ▒░ ░▒▒   ▓▒█░ ▒ ░░      ░▒▓███▀▒░ ▒░▒░▒░   ▒ ░░   
+░  ░      ░ ░ ░  ░ ░ ░  ░   ░         ░  ▒    ▒ ░▒░ ░ ░ ░  ░ ▒   ▒▒ ░   ░       ▒░▒   ░   ░ ▒ ▒░     ░    
+░      ░      ░      ░    ░         ░         ░  ░░ ░   ░    ░   ▒    ░          ░    ░ ░ ░ ░ ▒    ░      
+       ░      ░  ░   ░  ░           ░ ░       ░  ░  ░   ░  ░     ░  ░            ░          ░ ░           
+                                    ░                                                 ░''', 'blue')
+BANNER2 = colored('''
+                          -------------------------------------
+                          | MeetCheat Bot: The Google Meet Bot |
+                          -------------------------------------''', 'red')
+
+BANNER = BANNER1 + "\n" + BANNER2
 
 usernameFieldPath = "identifierId"
 usernameNextButtonPath = "identifierNext"
@@ -341,8 +360,18 @@ def sortMeetings():
             MEET_LINK.pop(0)
 
 
-# For clearing the terminal
+# For clearing the terminal except the banner
 def clrscr():
+    global BANNER
+    if os.name == 'posix':
+        _ = os.system('clear')
+    else:
+        _ = os.system('cls')
+    print(BANNER+"\n\n")
+
+
+# For clearing everything
+def clrscrAll():
     if os.name == 'posix':
         _ = os.system('clear')
     else:
@@ -397,7 +426,7 @@ if __name__ == "__main__":
                 driver.quit()
                 meetProcess.terminate()
                 time.sleep(3)
-                clrscr()
+                clrscrAll()
                 break
             elif ans == '6':
                 showProcesses()
@@ -423,7 +452,7 @@ if __name__ == "__main__":
         except Exception:
             pass
         time.sleep(3)
-        clrscr()
+        clrscrAll()
 
     except Exception:
         print("An error occured")
