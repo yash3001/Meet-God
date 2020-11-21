@@ -52,7 +52,7 @@ MENU1 = colored("""
 
 MENU2 = colored("""
 
-Answer: """, 'green')
+> Choice: """, 'green')
 
 MENU = MENU1 + MENU2
 
@@ -266,7 +266,7 @@ def showStatus():
     global STATUS
     clrscr()
     print(colored(f"The bot is {STATUS[0]}", 'yellow'))
-    input(colored("\n\n[Press Enter to go back to the main menu] ", 'green'))
+    input(colored("\n\n> [Press Enter to go back to the main menu] ", 'green'))
 
 
 # To print the remaining meetings and their timings
@@ -278,7 +278,7 @@ def showSchedule():
             print(colored(f"{index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
     else:
         print(colored("No meetings scheduled currently", 'yellow'))
-    input(colored("\n\n[Press Enter to go back to the main menu] ", 'green'))
+    input(colored("\n\n> [Press Enter to go back to the main menu] ", 'green'))
 
 
 # To add more meetings
@@ -287,10 +287,10 @@ def addMeetings():
     flag = 'y'
     clrscr()
     while flag.lower() == "y" or flag.lower() == "yes":
-        url = input("Enter the meeting url: ")
-        timming = input("Enter the time for joining in 24 hour format (HH:MM:SS): ")
+        url = input("> Enter the meeting url: ")
+        timming = input("> Enter the time for joining in 24 hour format (HH:MM:SS): ")
         MEET_LINK.append(url.strip()+" "+timming.strip())
-        flag = input(colored("\nMeeting added successfully.\n\nAdd new meeting? (y/N): ", 'green'))
+        flag = input(colored("\nMeeting added successfully.\n\n> Add new meeting? (y/N): ", 'green'))
     if len(multiprocessing.active_children()) == 2:
         meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
         meetProcess.start()
@@ -309,21 +309,21 @@ def modifyMeeting():
                 print(colored(f"{index+1}) {link.split()[0]} at {link.split()[1]}", 'yellow'))
         else:
             print(colored("No meetings scheduled currently", 'yellow'))
-            input(colored("\n\n[Press Enter to go back to the main menu] ", 'green'))
+            input(colored("\n\n> [Press Enter to go back to the main menu] ", 'green'))
             return
     
-        index = input(colored("\n\nEnter the meeting number to modify: ", 'green'))
+        index = input(colored("\n\n> Enter the meeting number to modify: ", 'green'))
         index = int(index) - 1
         while True:
             clrscr()
             print(colored(f"The chosen meeting is:\n{MEET_LINK[index].split()[0]} at {MEET_LINK[index].split()[1]}", 'cyan'))
-            choice = input(colored("\n\n1: Change the meet link\n2: Change the meet timing\n3: Delete this meeting\n\nChoice: ", 'green'))
+            choice = input(colored("\n\n1: Change the meet link\n2: Change the meet timing\n3: Delete this meeting\n\n> Choice: ", 'green'))
             if choice == "1":
-                newLink = input("\nEnter the new link: ").strip()
+                newLink = input("\n> Enter the new link: ").strip()
                 MEET_LINK[index] = newLink + " " + MEET_LINK[index].split()[1]
                 break
             elif choice == "2":
-                newTime = input("\nEnter the new timings: ").strip()
+                newTime = input("\n> Enter the new timings: ").strip()
                 MEET_LINK[index] = MEET_LINK[index].split()[0] + " " + newTime
                 if index == 0 and STATUS[0] == "Waiting for next meeting":
                     meetProcess.terminate()
@@ -354,7 +354,7 @@ def modifyMeeting():
         else:
             print(colored("No meetings scheduled currently", 'yellow'))
     
-        choice = input(colored("\n\n0: go back to main menu.\n1: Keep modifying more meetings\nAnswer: ", 'green'))
+        choice = input(colored("\n\n0: go back to main menu.\n1: Keep modifying more meetings\n> Choice: ", 'green'))
     
 
 # To sort the meetings according to their timings
@@ -397,7 +397,7 @@ def showProcesses():
     clrscr()
     print(len(multiprocessing.active_children()))
     print(multiprocessing.active_children())
-    input(colored("\n\n[Press enter to go back to the main menu] ", 'green'))
+    input(colored("\n\n> [Press enter to go back to the main menu] ", 'green'))
 
 
 
@@ -406,18 +406,19 @@ def showProcesses():
 #############################
 
 if __name__ == "__main__":
-    clrscr()
-    USERNAME = input("Enter the username for gmail account: ") if USERNAME == "" else USERNAME
-    PASSWORD = getpass.getpass("Enter the password for your gmail account: ") if PASSWORD == "" else PASSWORD
-
-    clrscr()
-    if len(MEET_LINK) == 0:
-        print("Enter the meet schedule")
-        addMeetings()
-    else:
-        sortMeetings()
-
     try:
+        clrscr()
+
+        USERNAME = input("> Enter the username for gmail account: ") if USERNAME == "" else USERNAME
+        PASSWORD = getpass.getpass("> Enter the password for your gmail account: ") if PASSWORD == "" else PASSWORD
+
+        clrscr()
+        if len(MEET_LINK) == 0:
+            print("Enter the meet schedule")
+            addMeetings()
+        else:
+            sortMeetings()
+
         driver = initBrowser()
         wait = webdriver.support.ui.WebDriverWait(driver, 5)
         login()
@@ -446,7 +447,7 @@ if __name__ == "__main__":
             elif ans == '6':
                 showProcesses()
             else:
-                print(colored("Wrong input, Try again", 'yellow'))
+                print(colored("Wrong input, Try again", 'red'))
                 time.sleep(3)
 
         meetProcess.join()
