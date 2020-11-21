@@ -16,74 +16,76 @@ from termcolor import colored
 ####### Global Variables #######
 ################################
 
-# Change these three variables to avoid typing again and again
-USERNAME = ""
-PASSWORD = ""
-MEET_LINK = Manager().list([])
+if __name__ == '__main__':
 
-BROWSER_DRIVER = ""
-# Choose the browser driver from the list below
-#############################################################
-#                   Google Chrome                           #
-#           Linux: "ChromeDrivers/linux64/chromedriver"     #
-#             Mac: "ChromeDrivers/mac64/chromedriver"       #
-#         Windows: "ChromeDrivers/win32/chromedriver.exe"   #
-#                                                           #
-#                   Mozilla Firefox                         #
-#     Linux (x32): "FirefoxDrivers/linux32/geckodriver"     #
-#     Linux (x64): "FirefoxDrivers/linux64/geckodriver"     #
-#             Mac: "FirefoxDrivers/mac64/geckodriver"       #
-#   Windows (x32): "FirefoxDrivers/win32/geckodriver.exe"   #
-#   Windows (x64): "FirefoxDrivers/win64/geckodriver.exe"   #
-#############################################################
-
-STATUS = Manager().list(["Idol"])
-MENU1 = colored("""
- --------------------------------------
-|            MAIN MENU                 |
-|--------------------------------------|
-| 1: Show bot status                   |
-| 2: Show Schedule                     |
-| 3: Add more meetings                 |
-| 4: Update/Delete an existing meeting |
-| 5: Exit and shutdown the bot         |
-| 6: Show Processes                    |
- --------------------------------------""", 'cyan')
-
-MENU2 = colored("""
-
-> Choice: """, 'green')
-
-MENU = MENU1 + MENU2
-
-BANNER1 = colored('''
- ███▄ ▄███▓▓█████ ▓█████▄▄▄█████▓     ▄████  ▒█████  ▓█████▄ 
-▓██▒▀█▀ ██▒▓█   ▀ ▓█   ▀▓  ██▒ ▓▒    ██▒ ▀█▒▒██▒  ██▒▒██▀ ██▌
-▓██    ▓██░▒███   ▒███  ▒ ▓██░ ▒░   ▒██░▄▄▄░▒██░  ██▒░██   █▌
-▒██    ▒██ ▒▓█  ▄ ▒▓█  ▄░ ▓██▓ ░    ░▓█  ██▓▒██   ██░░▓█▄   ▌
-▒██▒   ░██▒░▒████▒░▒████▒ ▒██▒ ░    ░▒▓███▀▒░ ████▓▒░░▒████▓ 
-░ ▒░   ░  ░░░ ▒░ ░░░ ▒░ ░ ▒ ░░       ░▒   ▒ ░ ▒░▒░▒░  ▒▒▓  ▒ 
-░  ░      ░ ░ ░  ░ ░ ░  ░   ░         ░   ░   ░ ▒ ▒░  ░ ▒  ▒ 
-░      ░      ░      ░    ░         ░ ░   ░ ░ ░ ░ ▒   ░ ░  ░ 
-       ░      ░  ░   ░  ░                 ░     ░ ░     ░    
-                                                      ░''', 'blue')
-BANNER2 = colored('''
-           ------------------------------------
-          |   Meet God : The Google Meet Bot   |
-           ------------------------------------''', 'red')
-
-BANNER = BANNER1 + "\n" + BANNER2 + "\n"
-
-usernameFieldPath = "identifierId"
-usernameNextButtonPath = "identifierNext"
-passwordFieldPath = "password"
-passwordNextButtonPath = "passwordNext"
-joinButton1Path = "//span[contains(text(), 'Join')]"
-joinButton2Path = "//span[contains(text(), 'Ask to join')]"
-listButtonPath = "//div[@aria-label='Chat with everyone']"
-listButtonCrossPath = "//button[@aria-label='Close']"
-studentNumberPath = "//span[@class='rua5Nb']"
-endButtonPath = "[aria-label='Leave call']"
+    # Change these three variables to avoid typing again and again
+    USERNAME = ""
+    PASSWORD = ""
+    MEET_LINK = Manager().list([])
+    
+    BROWSER_DRIVER = ""
+    # Choose the browser driver from the list below
+    #############################################################
+    #                   Google Chrome                           #
+    #           Linux: "ChromeDrivers/linux64/chromedriver"     #
+    #             Mac: "ChromeDrivers/mac64/chromedriver"       #
+    #         Windows: "ChromeDrivers/win32/chromedriver.exe"   #
+    #                                                           #
+    #                   Mozilla Firefox                         #
+    #     Linux (x32): "FirefoxDrivers/linux32/geckodriver"     #
+    #     Linux (x64): "FirefoxDrivers/linux64/geckodriver"     #
+    #             Mac: "FirefoxDrivers/mac64/geckodriver"       #
+    #   Windows (x32): "FirefoxDrivers/win32/geckodriver.exe"   #
+    #   Windows (x64): "FirefoxDrivers/win64/geckodriver.exe"   #
+    #############################################################
+    
+    STATUS = Manager().list(["Idol"])
+    MENU1 = colored("""
+     --------------------------------------
+    |            MAIN MENU                 |
+    |--------------------------------------|
+    | 1: Show bot status                   |
+    | 2: Show Schedule                     |
+    | 3: Add more meetings                 |
+    | 4: Update/Delete an existing meeting |
+    | 5: Exit and shutdown the bot         |
+    | 6: Show Processes                    |
+     --------------------------------------""", 'cyan')
+    
+    MENU2 = colored("""
+    
+    > Choice: """, 'green')
+    
+    MENU = MENU1 + MENU2
+    
+    BANNER1 = colored('''
+     ███▄ ▄███▓▓█████ ▓█████▄▄▄█████▓     ▄████  ▒█████  ▓█████▄ 
+    ▓██▒▀█▀ ██▒▓█   ▀ ▓█   ▀▓  ██▒ ▓▒    ██▒ ▀█▒▒██▒  ██▒▒██▀ ██▌
+    ▓██    ▓██░▒███   ▒███  ▒ ▓██░ ▒░   ▒██░▄▄▄░▒██░  ██▒░██   █▌
+    ▒██    ▒██ ▒▓█  ▄ ▒▓█  ▄░ ▓██▓ ░    ░▓█  ██▓▒██   ██░░▓█▄   ▌
+    ▒██▒   ░██▒░▒████▒░▒████▒ ▒██▒ ░    ░▒▓███▀▒░ ████▓▒░░▒████▓ 
+    ░ ▒░   ░  ░░░ ▒░ ░░░ ▒░ ░ ▒ ░░       ░▒   ▒ ░ ▒░▒░▒░  ▒▒▓  ▒ 
+    ░  ░      ░ ░ ░  ░ ░ ░  ░   ░         ░   ░   ░ ▒ ▒░  ░ ▒  ▒ 
+    ░      ░      ░      ░    ░         ░ ░   ░ ░ ░ ░ ▒   ░ ░  ░ 
+           ░      ░  ░   ░  ░                 ░     ░ ░     ░    
+                                                          ░''', 'blue')
+    BANNER2 = colored('''
+               ------------------------------------
+              |   Meet God : The Google Meet Bot   |
+               ------------------------------------''', 'red')
+    
+    BANNER = BANNER1 + "\n" + BANNER2 + "\n"
+    
+    usernameFieldPath = "identifierId"
+    usernameNextButtonPath = "identifierNext"
+    passwordFieldPath = "password"
+    passwordNextButtonPath = "passwordNext"
+    joinButton1Path = "//span[contains(text(), 'Join')]"
+    joinButton2Path = "//span[contains(text(), 'Ask to join')]"
+    listButtonPath = "//div[@aria-label='Chat with everyone']"
+    listButtonCrossPath = "//button[@aria-label='Close']"
+    studentNumberPath = "//span[@class='rua5Nb']"
+    endButtonPath = "[aria-label='Leave call']"
 
 
 
