@@ -1,4 +1,5 @@
 selenium 	# for web browser-based automation
 datetime 	# for scheduling
 termcolor   # for banner color
+requests    # for checking for updates
 # getpass     # to enter password securely
