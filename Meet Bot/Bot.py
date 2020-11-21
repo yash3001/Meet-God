@@ -90,7 +90,7 @@ if __name__ == '__main__':
     studentNumberPath = "//span[@class='rua5Nb']"
     endButtonPath = "[aria-label='Leave call']"
 
-    currentVersion = "v1.0.1"
+    currentVersion = "v1.1.0"
 
 
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
 def versionCheck():
     global currentVersion
     clrscr()
-    print("\nChecking for MeetNinja updates...")
+    print("\nChecking for MeetGod updates...")
     time.sleep(2)
     crawlVersionFile = requests.get(VERSION_CHECK_URL)
     crawlVersionFile = str(crawlVersionFile.content)
@@ -139,7 +139,7 @@ def initBrowser():
                                                         "profile.default_content_setting_values.media_stream_camera": 2,
                                                         "profile.default_content_setting_values.notifications": 2
                                                         })
-        chrome_options.add_argument("--mute-audio")
+        chromeOptions.add_argument("--mute-audio")
 
         driver = webdriver.Chrome(executable_path=BROWSER_DRIVER, options=chromeOptions)
     
