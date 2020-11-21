@@ -23,7 +23,6 @@ if __name__ == '__main__':
     USERNAME = ""
     PASSWORD = ""
     MEET_LINK = Manager().list([])
-    
     BROWSER_DRIVER = ""
     # Choose the browser driver from the list below
     #############################################################
@@ -90,7 +89,7 @@ if __name__ == '__main__':
     studentNumberPath = "//span[@class='rua5Nb']"
     endButtonPath = "[aria-label='Leave call']"
 
-    currentVersion = "v1.1.1"
+    currentVersion = "v2.0.0"
 
 
 
@@ -257,7 +256,8 @@ def endMeet():
 
 
 # The seperate process that attends the meeting
-def attendProcess(MEET_LINK, STATUS):
+def attendProcess(MEET_LINK, STATUS, BANNER):
+    BANNER = BANNER
     while len(MEET_LINK) != 0:            
         link = MEET_LINK[0]
         currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
@@ -323,7 +323,7 @@ def addMeetings():
         MEET_LINK.append(url.strip()+" "+timming.strip())
         flag = input(colored("\n    Meeting added successfully.\n\n    > Add new meeting? (y/N): ", 'green'))
     if len(multiprocessing.active_children()) == 2:
-        meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
+        meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, BANNER))
         meetProcess.start()
     sortMeetings()
 
@@ -359,7 +359,7 @@ def modifyMeeting():
                 if index == 0 and STATUS[0] == "Waiting for next meeting":
                     meetProcess.terminate()
                     time.sleep(0.1)
-                    meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
+                    meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, BANNER))
                     sortMeetings()
                     meetProcess.start()
                 break
@@ -369,7 +369,7 @@ def modifyMeeting():
                 if index == 0 and STATUS[0] == "Waiting for next meeting":
                     meetProcess.terminate()
                     time.sleep(0.1)
-                    meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
+                    meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, BANNER))
                     meetProcess.start()
                 break
 
@@ -561,7 +561,7 @@ if __name__ == "__main__":
         driver = initBrowser()
         wait = webdriver.support.ui.WebDriverWait(driver, 5)
         login()
-        meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
+        meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, BANNER))
         meetProcess.start()
 
         while True:
