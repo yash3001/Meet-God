@@ -72,7 +72,7 @@ BANNER2 = colored('''
           |   Meet God : The Google Meet Bot   |
            ------------------------------------''', 'red')
 
-BANNER = BANNER1 + "\n" + BANNER2
+BANNER = BANNER1 + "\n" + BANNER2 + "\n"
 
 usernameFieldPath = "identifierId"
 usernameNextButtonPath = "identifierNext"
@@ -204,7 +204,7 @@ def attendMeet(link):
         except Exception:
             time.sleep(1)
 
-    print(colored("\nNow attending Google Meet", 'yellow'))
+    print(colored("\nNow attending Google Meet", 'green'))
     STATUS[0] = "Attending meeting"
     time.sleep(2)
     clrscr()
@@ -277,7 +277,7 @@ def showSchedule():
         for index, link in enumerate(MEET_LINK):
             print(colored(f"{index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
     else:
-        print(colored("No meetings scheduled currently", 'cyan'))
+        print(colored("No meetings scheduled currently", 'yellow'))
     input(colored("\n\n[Press Enter to go back to the main menu] ", 'green'))
 
 
@@ -290,7 +290,7 @@ def addMeetings():
         url = input("Enter the meeting url: ")
         timming = input("Enter the time for joining in 24 hour format (HH:MM:SS): ")
         MEET_LINK.append(url.strip()+" "+timming.strip())
-        flag = input("Meeting added successfully.\nAdd new meeting? (y/N): ")
+        flag = input(colored("\nMeeting added successfully.\n\nAdd new meeting? (y/N): ", 'green'))
     if len(multiprocessing.active_children()) == 2:
         meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
         meetProcess.start()
@@ -303,12 +303,12 @@ def modifyMeeting():
     choice = '1'
     while choice != '0':
         clrscr()
-        print(colored("The current meeting schedule is:\n", 'cyan'))
+        print(colored("The current meeting schedule is:\n", 'yellow'))
         if len(MEET_LINK) > 0:
             for index, link in enumerate(MEET_LINK):
-                print(f"{index+1}) {link.split()[0]} at {link.split()[1]}")
+                print(colored(f"{index+1}) {link.split()[0]} at {link.split()[1]}", 'yellow'))
         else:
-            print(colored("No meetings scheduled currently", 'cyan'))
+            print(colored("No meetings scheduled currently", 'yellow'))
             input(colored("\n\n[Press Enter to go back to the main menu] ", 'green'))
             return
     
@@ -317,13 +317,13 @@ def modifyMeeting():
         while True:
             clrscr()
             print(colored(f"The chosen meeting is:\n{MEET_LINK[index].split()[0]} at {MEET_LINK[index].split()[1]}", 'cyan'))
-            choice = input("\n\n1: Change the meet link\n2: Change the meet timing\n3: Delete this meeting\n\nChoice: ")
+            choice = input(colored("\n\n1: Change the meet link\n2: Change the meet timing\n3: Delete this meeting\n\nChoice: ", 'green'))
             if choice == "1":
-                newLink = input(colored("\nEnter the new link: ", 'green')).strip()
+                newLink = input("\nEnter the new link: ").strip()
                 MEET_LINK[index] = newLink + " " + MEET_LINK[index].split()[1]
                 break
             elif choice == "2":
-                newTime = input(colored("\nEnter the new timings: ", 'green')).strip()
+                newTime = input("\nEnter the new timings: ").strip()
                 MEET_LINK[index] = MEET_LINK[index].split()[0] + " " + newTime
                 if index == 0 and STATUS[0] == "Waiting for next meeting":
                     meetProcess.terminate()
@@ -344,7 +344,7 @@ def modifyMeeting():
 
             else:
                 print(colored("\nWrong input, try again", 'red'))
-                time.sleep(1)
+                time.sleep(3)
 
         clrscr()
         print(colored("The updated meeting schedule is:\n", 'cyan'))
@@ -352,7 +352,7 @@ def modifyMeeting():
             for index, link in enumerate(MEET_LINK):
                 print(colored(f"{index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
         else:
-            print(colored("No meetings scheduled currently", 'cyan'))
+            print(colored("No meetings scheduled currently", 'yellow'))
     
         choice = input(colored("\n\n0: go back to main menu.\n1: Keep modifying more meetings\nAnswer: ", 'green'))
     
@@ -397,7 +397,7 @@ def showProcesses():
     clrscr()
     print(len(multiprocessing.active_children()))
     print(multiprocessing.active_children())
-    input("\n\n[Press enter to go back to the main menu] ")
+    input(colored("\n\n[Press enter to go back to the main menu] ", 'green'))
 
 
 
