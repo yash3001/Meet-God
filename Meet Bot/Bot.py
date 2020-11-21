@@ -20,9 +20,9 @@ import re; import requests
 if __name__ == '__main__':
 
     # Change these three variables to avoid typing again and again
-    USERNAME = ""
-    PASSWORD = ""
-    MEET_LINK = Manager().list([])
+    USERNAME = "4ni19cs123_b@nie.ac.in"
+    PASSWORD = "30012001@Yash"
+    MEET_LINK = Manager().list(["https://meet.google.com/bif-bhxr-jrx 22:30:00"])
     
     BROWSER_DRIVER = ""
     # Choose the browser driver from the list below
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     studentNumberPath = "//span[@class='rua5Nb']"
     endButtonPath = "[aria-label='Leave call']"
 
-    currentVersion = "v1.1.0"
+    currentVersion = "v1.1.1"
 
 
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
 def versionCheck():
     global currentVersion
     clrscr()
-    print("\nChecking for MeetGod updates...")
+    print("\n    Checking for MeetGod updates...")
     time.sleep(2)
     crawlVersionFile = requests.get(VERSION_CHECK_URL)
     crawlVersionFile = str(crawlVersionFile.content)
@@ -113,19 +113,19 @@ def versionCheck():
     currentVersion = int(''.join(currentVersion))
 
     if currentVersion >= latestVersion:
-        print(colored("Kuddos! You are using the latest version!", "green"))
+        print(colored("\n    Kuddos! You are using the latest version!", "green"))
         time.sleep(3)
     elif currentVersionNumber < latestVersionNumber:
-        print(colored("You are using an older version of MeetNinja.", "red"))
-        print(colored("Get the latest version at https://github.com/yash3001/youtube/tree/master/Meet%20Bot", "yellow"))
-        print(colored("Every new version comes with fixes, improvements, new features, etc..", "yellow"))
+        print(colored("\n    You are using an older version of MeetNinja.", "red"))
+        print(colored("    Get the latest version at https://github.com/yash3001/youtube/tree/master/Meet%20Bot", "yellow"))
+        print(colored("    Every new version comes with fixes, improvements, new features, etc..", "yellow"))
         time.sleep(7)
 
 
 # To initialize the browser, chrome for chromedriver and firefox for geckodriver
 def initBrowser():
     clrscr()
-    print("Initializing browser... ")
+    print("    Initializing browser... ")
 
     if BROWSER_DRIVER.lower().startswith("chrome"):
         chromeOptions = webdriver.ChromeOptions()
@@ -158,16 +158,16 @@ def initBrowser():
         driver = webdriver.Firefox(executable_path=BROWSER_DRIVER, options=firefoxOptions, firefox_profile=firefoxProfile)
     
     elif len(BROWSER_DRIVER) == 0:
-        print(colored("\nPlease enter the driver path in the source code\nExiting...", 'red'))
+        print(colored("\n    Please enter the driver path in the source code\n    Exiting...", 'red'))
         time.sleep(3)
         exit()
     
     else:
-        print(colored("\nWrong driver path\nExiting...", 'red'))
+        print(colored("\n    Wrong driver path\n    Exiting...", 'red'))
         time.sleep(3)
         exit()
     
-    print(colored("Success!", 'green'))
+    print(colored("    Success!", 'green'))
     time.sleep(3)
     return(driver)
 
@@ -175,7 +175,7 @@ def initBrowser():
 # To login into the goggle account
 def login():
     clrscr()
-    print("Logging into Google account... ")
+    print("    Logging into Google account... ")
     driver.get('https://accounts.google.com/signin')
 
     # global USERNAME, PASSWORD
@@ -197,7 +197,7 @@ def login():
     passwordNextButton.click()
 
     time.sleep(3)
-    print(colored("Success!", 'green'))
+    print(colored("    Success!", 'green'))
     time.sleep(1)
 
 
@@ -205,9 +205,9 @@ def login():
 def attendMeet(link):
     global STATUS
     clrscr()
-    print("\nNavigating to Google Meet... ")
-    print(colored("Success!", 'green'))
-    print("\nEntering Google Meet... ")
+    print("\n    Navigating to Google Meet... ")
+    print(colored("    Success!", 'green'))
+    print("\n    Entering Google Meet... ")
     driver.get(link)
 
     try:
@@ -217,7 +217,7 @@ def attendMeet(link):
     time.sleep(1)
     joinButton.click()
 
-    print(colored("Success!", 'green'))
+    print(colored("    Success!", 'green'))
     time.sleep(1)
 
     try:
@@ -235,7 +235,7 @@ def attendMeet(link):
         except Exception:
             time.sleep(1)
 
-    print(colored("\nNow attending Google Meet", 'green'))
+    print(colored("\n    Now attending Google Meet", 'green'))
     STATUS[0] = "Attending meeting"
     time.sleep(2)
     clrscr()
@@ -250,7 +250,7 @@ def endMeet():
     endButton = driver.find_element_by_css_selector(endButtonPath)
     endButton.click()
     clrscr()
-    print(colored("\nSuccessfully ended Google Meet", 'green'))
+    print(colored("\n    Successfully ended Google Meet", 'green'))
     time.sleep(2)
     clrscr()
     print(MENU, end="")
@@ -267,7 +267,7 @@ def attendProcess(MEET_LINK, STATUS):
             time.sleep(sleepTime)
         except Exception:
             clrscr()
-            print(colored("Omiting the next meeting because time is negative", 'yellow'))
+            print(colored("    Omiting the next meeting because time is negative", 'yellow'))
             MEET_LINK.pop(0)
             time.sleep(5)
             clrscr()
@@ -285,7 +285,7 @@ def attendProcess(MEET_LINK, STATUS):
             else:
                 time.sleep(5)
     clrscr()
-    print(colored("\n\nAll Meets completed successfully.", 'green'))
+    print(colored("\n\n    All Meets completed successfully.", 'green'))
     STATUS[0] = "idol"
     time.sleep(2)
     clrscr()
@@ -296,8 +296,8 @@ def attendProcess(MEET_LINK, STATUS):
 def showStatus():
     global STATUS
     clrscr()
-    print(colored(f"The bot is {STATUS[0]}", 'yellow'))
-    input(colored("\n\n> [Press Enter to go back to the main menu] ", 'green'))
+    print(colored(f"    The bot is {STATUS[0]}", 'yellow'))
+    input(colored("\n\n    > [Press Enter to go back to the main menu] ", 'green'))
 
 
 # To print the remaining meetings and their timings
@@ -306,10 +306,10 @@ def showSchedule():
     clrscr()
     if len(MEET_LINK) > 0:
         for index, link in enumerate(MEET_LINK):
-            print(colored(f"{index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
+            print(colored(f"    {index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
     else:
-        print(colored("No meetings scheduled currently", 'yellow'))
-    input(colored("\n\n> [Press Enter to go back to the main menu] ", 'green'))
+        print(colored("    No meetings scheduled currently", 'yellow'))
+    input(colored("\n\n    > [Press Enter to go back to the main menu] ", 'green'))
 
 
 # To add more meetings
@@ -318,10 +318,10 @@ def addMeetings():
     flag = 'y'
     clrscr()
     while flag.lower() == "y" or flag.lower() == "yes":
-        url = input("> Enter the meeting url: ")
-        timming = input("> Enter the time for joining in 24 hour format (HH:MM:SS): ")
+        url = input("    > Enter the meeting url: ")
+        timming = input("    > Enter the time for joining in 24 hour format (HH:MM:SS): ")
         MEET_LINK.append(url.strip()+" "+timming.strip())
-        flag = input(colored("\nMeeting added successfully.\n\n> Add new meeting? (y/N): ", 'green'))
+        flag = input(colored("\n    Meeting added successfully.\n\n    > Add new meeting? (y/N): ", 'green'))
     if len(multiprocessing.active_children()) == 2:
         meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS))
         meetProcess.start()
@@ -334,27 +334,27 @@ def modifyMeeting():
     choice = '1'
     while choice != '0':
         clrscr()
-        print(colored("The current meeting schedule is:\n", 'yellow'))
+        print(colored("    The current meeting schedule is:\n", 'yellow'))
         if len(MEET_LINK) > 0:
             for index, link in enumerate(MEET_LINK):
-                print(colored(f"{index+1}) {link.split()[0]} at {link.split()[1]}", 'yellow'))
+                print(colored(f"    {index+1}) {link.split()[0]} at {link.split()[1]}", 'yellow'))
         else:
-            print(colored("No meetings scheduled currently", 'yellow'))
-            input(colored("\n\n> [Press Enter to go back to the main menu] ", 'green'))
+            print(colored("    No meetings scheduled currently", 'yellow'))
+            input(colored("\n\n    > [Press Enter to go back to the main menu] ", 'green'))
             return
     
-        index = input(colored("\n\n> Enter the meeting number to modify: ", 'green'))
+        index = input(colored("\n\n    > Enter the meeting number to modify: ", 'green'))
         index = int(index) - 1
         while True:
             clrscr()
-            print(colored(f"The chosen meeting is:\n{MEET_LINK[index].split()[0]} at {MEET_LINK[index].split()[1]}", 'cyan'))
-            choice = input(colored("\n\n1: Change the meet link\n2: Change the meet timing\n3: Delete this meeting\n\n> Choice: ", 'green'))
+            print(colored(f"    The chosen meeting is:\n{MEET_LINK[index].split()[0]} at {MEET_LINK[index].split()[1]}", 'cyan'))
+            choice = input(colored("\n\n    1: Change the meet link\n    2: Change the meet timing\n    3: Delete this meeting\n\n    > Choice: ", 'green'))
             if choice == "1":
-                newLink = input("\n> Enter the new link: ").strip()
+                newLink = input("\n    > Enter the new link: ").strip()
                 MEET_LINK[index] = newLink + " " + MEET_LINK[index].split()[1]
                 break
             elif choice == "2":
-                newTime = input("\n> Enter the new timings: ").strip()
+                newTime = input("\n    > Enter the new timings: ").strip()
                 MEET_LINK[index] = MEET_LINK[index].split()[0] + " " + newTime
                 if index == 0 and STATUS[0] == "Waiting for next meeting":
                     meetProcess.terminate()
@@ -374,18 +374,18 @@ def modifyMeeting():
                 break
 
             else:
-                print(colored("\nWrong input, try again", 'red'))
+                print(colored("\n    Wrong input, try again", 'red'))
                 time.sleep(3)
 
         clrscr()
-        print(colored("The updated meeting schedule is:\n", 'cyan'))
+        print(colored("    The updated meeting schedule is:\n", 'cyan'))
         if len(MEET_LINK) > 0:
             for index, link in enumerate(MEET_LINK):
-                print(colored(f"{index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
+                print(colored(f"    {index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
         else:
-            print(colored("No meetings scheduled currently", 'yellow'))
+            print(colored("    No meetings scheduled currently", 'yellow'))
     
-        choice = input(colored("\n\n0: go back to main menu.\n1: Keep modifying more meetings\n> Choice: ", 'green'))
+        choice = input(colored("\n\n    0: go back to main menu.\n    1: Keep modifying more meetings\n    > Choice: ", 'green'))
     
 
 # To sort the meetings according to their timings
@@ -428,7 +428,7 @@ def showProcesses():
     clrscr()
     print(len(multiprocessing.active_children()))
     print(multiprocessing.active_children())
-    input(colored("\n\n> [Press enter to go back to the main menu] ", 'green'))
+    input(colored("\n\n    > [Press enter to go back to the main menu] ", 'green'))
 
 
 
@@ -441,16 +441,16 @@ if __name__ == "__main__":
         versionCheck()
         clrscr()
 
-        print(colored("Now starting the bot...", 'cyan'))
+        print(colored("    Now starting the bot...", 'cyan'))
         time.sleep(3)
         clrscr()
 
-        USERNAME = input("> Enter the username for gmail account: ") if USERNAME == "" else USERNAME
-        PASSWORD = getpass.getpass("> Enter the password for your gmail account: ") if PASSWORD == "" else PASSWORD
+        USERNAME = input("    > Enter the username for gmail account: ") if USERNAME == "" else USERNAME
+        PASSWORD = getpass.getpass("    > Enter the password for your gmail account: ") if PASSWORD == "" else PASSWORD
 
         clrscr()
         if len(MEET_LINK) == 0:
-            print("Enter the meet schedule")
+            print("    Enter the meet schedule")
             addMeetings()
         else:
             sortMeetings()
@@ -459,13 +459,13 @@ if __name__ == "__main__":
             clrscr()
             if os.name == "posix":
                 while True:
-                    choice = input("What platform are you on?\n1) Linux\n2) Mac\n> Answer(1 or 2): ")
+                    choice = input("    What platform are you on?\n    1) Linux\n    2) Mac\n    > Answer(1 or 2): ")
                     if choice.lower() == "1" or choice.lower() == 'linux':
                         clrscr()
-                        choice = input("What is your architecture?\n1) 64bit\n2) 32bit\n> Answer(1 or 2):")
+                        choice = input("    What is your architecture?\n    1) 64bit\n    2) 32bit\n    > Answer(1 or 2): ")
                         clrscr()
                         if choice.lower() == "1" or choice.lower() == '64bit':
-                            choice = input("What Browser do you use?\n1) Firefox\n2) Chromium\n> Answer(1 or 2):")
+                            choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chromium\n    > Answer(1 or 2): ")
                             if choice.lower() == "1" or choice.lower() == 'firefox':
                                 BROWSER_DRIVER = "FirefoxDrivers/linux64/geckodriver"
                                 break
@@ -473,12 +473,12 @@ if __name__ == "__main__":
                                 BROWSER_DRIVER = "ChromeDrivers/linux64/chromedriver"
                                 break
                             else:
-                                print(colored("\nWrong input, try again", 'red'))
+                                print(colored("\n    Wrong input, try again", 'red'))
                                 time.sleep(3)
                                 clrscr()
                                 continue
                         elif choice.lower() == "2" or choice.lower() == '32bit':
-                            choice = input("What Browser do you use?\n1) Firefox\n2) Chromium\n> Answer(1 or 2):")
+                            choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chromium\n    > Answer(1 or 2): ")
                             if choice.lower() == "1" or choice.lower() == 'firefox':
                                 BROWSER_DRIVER = "FirefoxDrivers/linux32/geckodriver"
                                 break
@@ -486,19 +486,19 @@ if __name__ == "__main__":
                                 BROWSER_DRIVER = "ChromeDrivers/linux64/chromedriver"
                                 break
                             else:
-                                print(colored("\nWrong input, try again", 'red'))
+                                print(colored("\n    Wrong input, try again", 'red'))
                                 time.sleep(3)
                                 clrscr()
                                 continue
                         else:
-                            print(colored("\nWrong input, try again", 'red'))
+                            print(colored("\n    Wrong input, try again", 'red'))
                             time.sleep(3)
                             clrscr()
                             continue
 
                     elif choice.lower() == "2" or choice.lower() == 'mac':
                         clrscr()
-                        choice = input("What Browser do you use?\n1) Firefox\n2) Chromium\n> Answer(1 or 2):")
+                        choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chromium\n    > Answer(1 or 2): ")
                         if choice.lower() == "1" or choice.lower() == 'firefox':
                             BROWSER_DRIVER = "FirefoxDrivers/mac64/geckodriver"
                             break
@@ -506,22 +506,22 @@ if __name__ == "__main__":
                             BROWSER_DRIVER = "ChromeDrivers/mac64/chromedriver"
                             break
                         else:
-                            print(colored("\nWrong input, try again", 'red'))
+                            print(colored("\n    Wrong input, try again", 'red'))
                             time.sleep(3)
                             clrscr()
                             continue
                     else:
-                        print(colored("\nWrong input, try again", 'red'))
+                        print(colored("\n    Wrong input, try again", 'red'))
                         time.sleep(3)
                         clrscr()
                         continue
 
             elif os.name == 'nt':
                 while True:
-                    choice = input("What is your architecture?\n1) 64bit\n2) 32bit\n> Answer(1 or 2):")
+                    choice = input("    What is your architecture?\n    1) 64bit\n    2) 32bit\n    > Answer(1 or 2): ")
                     if choice.lower() == "1" or choice.lower() == '64bit':
                         clrscr()
-                        choice = input("What Browser do you use?\n1) Firefox\n2) Chrome\n> Answer(1 or 2):")
+                        choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chrome\n    > Answer(1 or 2): ")
                         if choice.lower() == "1" or choice.lower() == 'firefox':
                             BROWSER_DRIVER = "FirefoxDrivers/win64/geckodriver.exe"
                             break
@@ -529,13 +529,13 @@ if __name__ == "__main__":
                             BROWSER_DRIVER = "ChromeDrivers/win32/chromedriver.exe"
                             break
                         else:
-                            print(colored("Wrong input, try again", 'red'))
+                            print(colored("    Wrong input, try again", 'red'))
                             time.sleep(3)
                             clrscr()
                             continue
                     elif choice.lower() == "2" or choice.lower() == '32bit':
                         clrscr()
-                        choice = input("What Browser do you use?\n1) Firefox\n2) Chrome\n> Answer(1 or 2):")
+                        choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chrome\n    > Answer(1 or 2): ")
                         if choice.lower() == "1" or choice.lower() == 'firefox':
                             BROWSER_DRIVER = "FirefoxDrivers/win32/geckodriver.exe"
                             break
@@ -543,18 +543,18 @@ if __name__ == "__main__":
                             BROWSER_DRIVER = "ChromeDrivers/win32/chromedriver.exe"
                             break
                         else:
-                            print(colored("Wrong input, try again", 'red'))
+                            print(colored("    Wrong input, try again", 'red'))
                             time.sleep(3)
                             clrscr()
                             continue
                     else:
-                        print(colored("Wrong input, try again", 'red'))
+                        print(colored("    Wrong input, try again", 'red'))
                         time.sleep(3)
                         clrscr()
                         continue
             
             else:
-                print(colored("Platform not supported\nExiting...", 'red'))
+                print(colored("    Platform not supported\n    Exiting...", 'red'))
                 time.sleep(3)
                 exit()
 
@@ -577,7 +577,7 @@ if __name__ == "__main__":
                 modifyMeeting()
             elif ans == '5':
                 clrscr()
-                print(colored("Cleaning up and exiting...", 'green'))
+                print(colored("    Cleaning up and exiting...", 'green'))
                 try:
                     driver.quit()
                 except Exception:
@@ -592,7 +592,7 @@ if __name__ == "__main__":
             elif ans == '6':
                 showProcesses()
             else:
-                print(colored("Wrong input, Try again", 'red'))
+                print(colored("    Wrong input, Try again", 'red'))
                 time.sleep(3)
 
         meetProcess.join()
@@ -600,10 +600,10 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         clrscr()
-        print(colored("\n\nCTRL ^C\nThrew a wrench in the works.", 'yellow'))
-        print(colored("Press Enter to exit.", 'yellow'))
+        print(colored("\n\n    CTRL ^C\n    Threw a wrench in the works.", 'yellow'))
+        print(colored("    Press Enter to exit.", 'yellow'))
         input()
-        print(colored("Cleaning up and exiting...", 'yellow'))
+        print(colored("    Cleaning up and exiting...", 'yellow'))
         try:
             driver.quit()
         except Exception:
@@ -616,10 +616,10 @@ if __name__ == "__main__":
         clrscrAll()
 
     except Exception:
-        print(colored("An error occured", 'red'))
-        print(colored("Press Enter to exit.", 'red'))
+        print(colored("    An error occured", 'red'))
+        print(colored("    Press Enter to exit.", 'red'))
         input()
-        print(colored("Cleaning up and exiting...", 'red'))
+        print(colored("    Cleaning up and exiting...", 'red'))
         try:
             driver.quit()
         except Exception:
