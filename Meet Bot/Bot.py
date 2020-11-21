@@ -20,9 +20,9 @@ import re; import requests
 if __name__ == '__main__':
 
     # Change these three variables to avoid typing again and again
-    USERNAME = "4ni19cs123_b@nie.ac.in"
-    PASSWORD = "30012001@Yash"
-    MEET_LINK = Manager().list(["https://meet.google.com/bif-bhxr-jrx 22:30:00"])
+    USERNAME = ""
+    PASSWORD = ""
+    MEET_LINK = Manager().list([])
     
     BROWSER_DRIVER = ""
     # Choose the browser driver from the list below
