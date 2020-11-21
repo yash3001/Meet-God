@@ -90,7 +90,7 @@ if __name__ == '__main__':
     studentNumberPath = "//span[@class='rua5Nb']"
     endButtonPath = "[aria-label='Leave call']"
 
-    currentVersion = "v1.0.0"
+    currentVersion = "v1.0.1"
 
 
 
@@ -98,12 +98,12 @@ if __name__ == '__main__':
 ####### Function definitions #######
 ####################################
 
-
+# To check for updates
 def versionCheck():
     global currentVersion
     clrscr()
     print("\nChecking for MeetNinja updates...")
-
+    time.sleep(2)
     crawlVersionFile = requests.get(VERSION_CHECK_URL)
     crawlVersionFile = str(crawlVersionFile.content)
     crawlVersionFile = re.findall(r"([0-9]+)", crawlVersionFile)
@@ -120,7 +120,7 @@ def versionCheck():
         print(colored("Get the latest version at https://github.com/yash3001/youtube/tree/master/Meet%20Bot", "yellow"))
         print(colored("Every new version comes with fixes, improvements, new features, etc..", "yellow"))
         time.sleep(7)
-    
+
 
 # To initialize the browser, chrome for chromedriver and firefox for geckodriver
 def initBrowser():
@@ -443,6 +443,7 @@ if __name__ == "__main__":
 
         print(colored("Now starting the bot...", 'cyan'))
         time.sleep(3)
+        clrscr()
 
         USERNAME = input("> Enter the username for gmail account: ") if USERNAME == "" else USERNAME
         PASSWORD = getpass.getpass("> Enter the password for your gmail account: ") if PASSWORD == "" else PASSWORD
