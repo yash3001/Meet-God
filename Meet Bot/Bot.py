@@ -9,6 +9,7 @@ from selenium.webdriver.common.keys import Keys
 import time; import getpass; import datetime; import multiprocessing; import os
 from multiprocessing import Manager
 from termcolor import colored
+import re; import requests
 
 
 
@@ -75,6 +76,8 @@ if __name__ == '__main__':
                ------------------------------------''', 'red')
     
     BANNER = BANNER1 + "\n" + BANNER2 + "\n"
+
+    VERSION_CHECK_URL = "https://raw.githubusercontent.com/yash3001/youtube/master/Meet%20Bot/version.txt"
     
     usernameFieldPath = "identifierId"
     usernameNextButtonPath = "identifierNext"
@@ -87,11 +90,37 @@ if __name__ == '__main__':
     studentNumberPath = "//span[@class='rua5Nb']"
     endButtonPath = "[aria-label='Leave call']"
 
+    currentVersion = "v1.0.0"
+
 
 
 ####################################
 ####### Function definitions #######
 ####################################
+
+
+def versionCheck():
+    global currentVersion
+    clrscr()
+    print("\nChecking for MeetNinja updates...")
+
+    crawlVersionFile = requests.get(VERSION_CHECK_URL)
+    crawlVersionFile = str(crawlVersionFile.content)
+    crawlVersionFile = re.findall(r"([0-9]+)", crawlVersionFile)
+    latestVersion = int(''.join(crawlVersionFile))
+
+    currentVersion = re.findall(r"([0-9]+)", currentVersion)
+    currentVersion = int(''.join(currentVersion))
+
+    if currentVersion >= latestVersion:
+        print(colored("Kuddos! You are using the latest version!", "green"))
+        time.sleep(3)
+    elif currentVersionNumber < latestVersionNumber:
+        print(colored("You are using an older version of MeetNinja.", "red"))
+        print(colored("Get the latest version at https://github.com/yash3001/youtube/tree/master/Meet%20Bot", "yellow"))
+        print(colored("Every new version comes with fixes, improvements, new features, etc..", "yellow"))
+        time.sleep(7)
+    
 
 # To initialize the browser, chrome for chromedriver and firefox for geckodriver
 def initBrowser():
@@ -409,7 +438,11 @@ def showProcesses():
 
 if __name__ == "__main__":
     try:
+        versionCheck()
         clrscr()
+
+        print(colored("Now starting the bot...", 'cyan'))
+        time.sleep(3)
 
         USERNAME = input("> Enter the username for gmail account: ") if USERNAME == "" else USERNAME
         PASSWORD = getpass.getpass("> Enter the password for your gmail account: ") if PASSWORD == "" else PASSWORD
