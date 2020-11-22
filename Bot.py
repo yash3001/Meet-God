@@ -19,7 +19,7 @@ import re; import requests
 
 if __name__ == '__main__':
 
-    currentVersion = "v2.2.0"
+    currentVersion = "v2.2.1"
 
     # Change these three variables to avoid typing again and again
     USERNAME = ""
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     #   Windows (x64): "FirefoxDrivers/win64/geckodriver.exe"   #
     #############################################################
     
-    STATUS = Manager().list(["Idol"])
+    STATUS = Manager().list(["Starting"])
     MENU1 = colored("""
      --------------------------------------
     |            MAIN MENU                 |
@@ -327,7 +327,7 @@ def addMeetings():
         timming = input("    > Enter the time for joining in 24 hour format (HH:MM:SS): ")
         MEET_LINK.append(url.strip()+" "+timming.strip())
         flag = input(colored("\n    Meeting added successfully.\n\n    > Add new meeting? (y/N): ", 'green'))
-    if len(multiprocessing.active_children()) == 2:
+    if len(multiprocessing.active_children()) == 3:
         meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, BANNER, MENU))
         meetProcess.start()
     sortMeetings()
