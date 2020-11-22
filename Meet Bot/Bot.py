@@ -19,7 +19,7 @@ import re; import requests
 
 if __name__ == '__main__':
 
-    currentVersion = "v2.1.0"
+    currentVersion = "v2.2.0"
 
     # Change these three variables to avoid typing again and again
     USERNAME = ""
@@ -59,7 +59,6 @@ if __name__ == '__main__':
     > Choice: """, 'green')
     
     MENU = MENU1 + MENU2
-    MENU = Manager().list([f"{MENU}"])
     
     BANNER1 = colored('''
      ███▄ ▄███▓▓█████ ▓█████▄▄▄█████▓     ▄████  ▒█████  ▓█████▄ 
@@ -78,7 +77,6 @@ if __name__ == '__main__':
                ------------------------------------''', 'red')
     
     BANNER = BANNER1 + "\n" + BANNER2 + "\n"
-    BANNER = Manager().list([f"{BANNER}"])
 
     VERSION_CHECK_URL = "https://raw.githubusercontent.com/yash3001/youtube/master/Meet%20Bot/version.txt"
     
@@ -203,8 +201,11 @@ def login():
 
 
 # To navigate to the meeting link and enter the meeting
-def attendMeet(link):
-    global STATUS, MENU
+def attendMeet(link, MENU, driver):
+    global STATUS
+    joinButton1Path = "//span[contains(text(), 'Join')]"
+    joinButton2Path = "//span[contains(text(), 'Ask to join')]"
+    listButtonPath = "//div[@aria-label='Chat with everyone']"
     clrscr()
     print("\n    Navigating to Google Meet... ")
     print(colored("    Success!", 'green'))
@@ -240,12 +241,13 @@ def attendMeet(link):
     STATUS[0] = "Attending meeting"
     time.sleep(2)
     clrscr()
-    print(MENU[0], end="")
+    print(MENU, end="")
 
 
 # To exit the meeting after ending
-def endMeet():
-    global MENU
+def endMeet(MENU):
+    listButtonCrossPath = "//button[@aria-label='Close']"
+    endButtonPath = "[aria-label='Leave call']"
     list = driver.find_element_by_xpath(listButtonCrossPath)
     list.click()
     time.sleep(1)
@@ -255,11 +257,12 @@ def endMeet():
     print(colored("\n    Successfully ended Google Meet", 'green'))
     time.sleep(2)
     clrscr()
-    print(MENU[0], end="")
+    print(MENU, end="")
 
 
 # The seperate process that attends the meeting
-def attendProcess(MEET_LINK, STATUS, BANNER, MENU):
+def attendProcess(MEET_LINK, STATUS, MENU, driver):
+    studentNumberPath = "//span[@class='rua5Nb']"
     while len(MEET_LINK) != 0:            
         link = MEET_LINK[0]
         currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
@@ -273,16 +276,16 @@ def attendProcess(MEET_LINK, STATUS, BANNER, MENU):
             MEET_LINK.pop(0)
             time.sleep(5)
             clrscr()
-            print(MENU[0], end="")
+            print(MENU, end="")
             continue
-        attendMeet(link.split()[0])
+        attendMeet(link.split()[0], MENU, driver)
         MEET_LINK.pop(0)
         time.sleep(1200)
         while True:
             numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
             numPeople = int(str(numPeople[1:-1]))
             if numPeople < 20:
-                endMeet()
+                endMeet(MENU)
                 break
             else:
                 time.sleep(5)
@@ -291,7 +294,7 @@ def attendProcess(MEET_LINK, STATUS, BANNER, MENU):
     STATUS[0] = "idol"
     time.sleep(2)
     clrscr()
-    print(MENU[0], end="")
+    print(MENU, end="")
 
 
 # To show the bot status
@@ -332,7 +335,7 @@ def addMeetings():
 
 # To modify or delete a meeting
 def modifyMeeting():
-    global MEET_LINK, STATUS, meetProcess
+    global MEET_LINK, STATUS, meetProcess, driver
     choice = '1'
     while choice != '0':
         clrscr()
@@ -361,7 +364,7 @@ def modifyMeeting():
                 if index == 0 and STATUS[0] == "Waiting for next meeting":
                     meetProcess.terminate()
                     time.sleep(0.1)
-                    meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, BANNER, MENU))
+                    meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, MENU, driver))
                     sortMeetings()
                     meetProcess.start()
                 break
@@ -371,7 +374,7 @@ def modifyMeeting():
                 if index == 0 and STATUS[0] == "Waiting for next meeting":
                     meetProcess.terminate()
                     time.sleep(0.1)
-                    meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, BANNER, MENU))
+                    meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, MENU, driver))
                     meetProcess.start()
                 break
 
@@ -409,12 +412,29 @@ def sortMeetings():
 
 # For clearing the terminal except the banner
 def clrscr():
-    global BANNER
+    BANNER1 = colored('''
+     ███▄ ▄███▓▓█████ ▓█████▄▄▄█████▓     ▄████  ▒█████  ▓█████▄ 
+    ▓██▒▀█▀ ██▒▓█   ▀ ▓█   ▀▓  ██▒ ▓▒    ██▒ ▀█▒▒██▒  ██▒▒██▀ ██▌
+    ▓██    ▓██░▒███   ▒███  ▒ ▓██░ ▒░   ▒██░▄▄▄░▒██░  ██▒░██   █▌
+    ▒██    ▒██ ▒▓█  ▄ ▒▓█  ▄░ ▓██▓ ░    ░▓█  ██▓▒██   ██░░▓█▄   ▌
+    ▒██▒   ░██▒░▒████▒░▒████▒ ▒██▒ ░    ░▒▓███▀▒░ ████▓▒░░▒████▓ 
+    ░ ▒░   ░  ░░░ ▒░ ░░░ ▒░ ░ ▒ ░░       ░▒   ▒ ░ ▒░▒░▒░  ▒▒▓  ▒ 
+    ░  ░      ░ ░ ░  ░ ░ ░  ░   ░         ░   ░   ░ ▒ ▒░  ░ ▒  ▒ 
+    ░      ░      ░      ░    ░         ░ ░   ░ ░ ░ ░ ▒   ░ ░  ░ 
+           ░      ░  ░   ░  ░                 ░     ░ ░     ░    
+                                                          ░''', 'blue')
+    BANNER2 = colored('''
+               ------------------------------------
+              |   Meet God : The Google Meet Bot   |
+               ------------------------------------''', 'red')
+    
+    BANNER = BANNER1 + "\n" + BANNER2 + "\n"
+
     if os.name == 'posix':
         _ = os.system('clear')
     else:
         _ = os.system('cls')
-    print(BANNER[0]+"\n\n")
+    print(BANNER+"\n\n")
 
 
 # For clearing everything
@@ -563,12 +583,12 @@ if __name__ == "__main__":
         driver = initBrowser()
         wait = webdriver.support.ui.WebDriverWait(driver, 5)
         login()
-        meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, BANNER, MENU))
+        meetProcess = multiprocessing.Process(target=attendProcess, args=(MEET_LINK, STATUS, MENU, driver))
         meetProcess.start()
 
         while True:
             clrscr()
-            ans = input(MENU[0])
+            ans = input(MENU)
             if ans == '1':
                 showStatus()
             elif ans == '2':
