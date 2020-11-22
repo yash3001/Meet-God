@@ -114,7 +114,7 @@ def versionCheck():
     if currentVersion >= latestVersion:
         print(colored("\n    Kuddos! You are using the latest version!", "green"))
         time.sleep(3)
-    elif currentVersionNumber < latestVersionNumber:
+    elif currentVersion < latestVersion:
         print(colored("\n    You are using an older version of MeetNinja.", "red"))
         print(colored("    Get the latest version at https://github.com/yash3001/youtube/tree/master/Meet%20Bot", "yellow"))
         print(colored("    Every new version comes with fixes, improvements, new features, etc..", "yellow"))
