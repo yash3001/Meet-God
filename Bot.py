@@ -78,7 +78,7 @@ if __name__ == '__main__':
     
     BANNER = BANNER1 + "\n" + BANNER2 + "\n"
 
-    VERSION_CHECK_URL = "https://raw.githubusercontent.com/yash3001/youtube/master/Meet%20Bot/version.txt"
+    VERSION_CHECK_URL = "https://raw.githubusercontent.com/yash3001/Meet-God/master/version.txt"
     
     usernameFieldPath = "identifierId"
     usernameNextButtonPath = "identifierNext"
