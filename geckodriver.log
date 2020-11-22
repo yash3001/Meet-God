@@ -1,0 +1,224 @@
+1605956379270	geckodriver	INFO	Listening on 127.0.0.1:48925
+1605956380254	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "--width=800" "--height=800" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileSlnNiU"
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (en-US)
+
+(firefox:142572): Gtk-WARNING **: 16:29:40.305: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:142659): Gtk-WARNING **: 16:29:41.510: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:142666): Gtk-WARNING **: 16:29:41.703: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:142659): GLib-GObject-WARNING **: 16:29:42.034: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:142659): GLib-GObject-CRITICAL **: 16:29:42.034: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:142659): GLib-GObject-WARNING **: 16:29:42.038: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:142659): GLib-GObject-CRITICAL **: 16:29:42.038: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+
+(/usr/lib/firefox/firefox:142666): GLib-GObject-WARNING **: 16:29:42.337: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:142666): GLib-GObject-CRITICAL **: 16:29:42.337: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:142666): GLib-GObject-WARNING **: 16:29:42.340: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:142666): GLib-GObject-CRITICAL **: 16:29:42.340: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+1605956382816	Marionette	INFO	Listening on port 43725
+1605956382914	Marionette	WARN	TLS certificate errors will be ignored for this session
+
+(/usr/lib/firefox/firefox:142776): Gtk-WARNING **: 16:29:43.816: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:142776): GLib-GObject-WARNING **: 16:29:44.278: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:142776): GLib-GObject-CRITICAL **: 16:29:44.278: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:142776): GLib-GObject-WARNING **: 16:29:44.280: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:142776): GLib-GObject-CRITICAL **: 16:29:44.280: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+1605956494786	Marionette	INFO	Stopped listening on port 43725
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+1605958692155	geckodriver	INFO	Listening on 127.0.0.1:42693
+1605958692165	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "--width=800" "--height=800" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilevQ79O9"
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (en-US)
+
+(firefox:157218): Gtk-WARNING **: 17:08:12.201: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:157304): Gtk-WARNING **: 17:08:13.172: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:157318): Gtk-WARNING **: 17:08:13.441: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:157304): GLib-GObject-WARNING **: 17:08:13.749: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:157304): GLib-GObject-CRITICAL **: 17:08:13.749: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:157304): GLib-GObject-WARNING **: 17:08:13.752: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:157304): GLib-GObject-CRITICAL **: 17:08:13.752: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+
+(/usr/lib/firefox/firefox:157318): GLib-GObject-WARNING **: 17:08:13.978: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:157318): GLib-GObject-CRITICAL **: 17:08:13.978: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:157318): GLib-GObject-WARNING **: 17:08:13.980: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:157318): GLib-GObject-CRITICAL **: 17:08:13.980: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+1605958694212	Marionette	INFO	Listening on port 33383
+1605958694288	Marionette	WARN	TLS certificate errors will be ignored for this session
+
+(/usr/lib/firefox/firefox:157423): Gtk-WARNING **: 17:08:15.254: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:157423): GLib-GObject-WARNING **: 17:08:15.593: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:157423): GLib-GObject-CRITICAL **: 17:08:15.593: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:157423): GLib-GObject-WARNING **: 17:08:15.594: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:157423): GLib-GObject-CRITICAL **: 17:08:15.594: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+1605958722130	Marionette	INFO	Stopped listening on port 33383
+1605977973992	geckodriver	INFO	Listening on 127.0.0.1:55561
+1605977974831	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "--width=800" "--height=800" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofilev7JSex"
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (en-US)
+
+(firefox:5949): Gtk-WARNING **: 22:29:34.887: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:6081): Gtk-WARNING **: 22:29:36.116: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:6092): Gtk-WARNING **: 22:29:36.391: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:6081): GLib-GObject-WARNING **: 22:29:36.629: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:6081): GLib-GObject-CRITICAL **: 22:29:36.630: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:6081): GLib-GObject-WARNING **: 22:29:36.632: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:6081): GLib-GObject-CRITICAL **: 22:29:36.632: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+
+(/usr/lib/firefox/firefox:6092): GLib-GObject-WARNING **: 22:29:36.983: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:6092): GLib-GObject-CRITICAL **: 22:29:36.984: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:6092): GLib-GObject-WARNING **: 22:29:36.987: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:6092): GLib-GObject-CRITICAL **: 22:29:36.988: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+1605977977623	Marionette	INFO	Listening on port 41727
+1605977977696	Marionette	WARN	TLS certificate errors will be ignored for this session
+
+(/usr/lib/firefox/firefox:6204): Gtk-WARNING **: 22:29:38.662: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:6204): GLib-GObject-WARNING **: 22:29:39.079: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:6204): GLib-GObject-CRITICAL **: 22:29:39.079: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:6204): GLib-GObject-WARNING **: 22:29:39.081: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:6204): GLib-GObject-CRITICAL **: 22:29:39.081: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+1605978068256	Marionette	INFO	Stopped listening on port 41727
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+1605980299844	geckodriver	INFO	Listening on 127.0.0.1:54599
+1605980299858	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "--width=800" "--height=800" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileFzrUIJ"
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (en-US)
+
+(firefox:24169): Gtk-WARNING **: 23:08:19.897: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:24280): Gtk-WARNING **: 23:08:21.063: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:24288): Gtk-WARNING **: 23:08:21.361: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:24280): GLib-GObject-WARNING **: 23:08:21.616: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:24280): GLib-GObject-CRITICAL **: 23:08:21.616: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:24280): GLib-GObject-WARNING **: 23:08:21.622: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:24280): GLib-GObject-CRITICAL **: 23:08:21.622: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+
+(/usr/lib/firefox/firefox:24288): GLib-GObject-WARNING **: 23:08:22.055: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:24288): GLib-GObject-CRITICAL **: 23:08:22.055: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:24288): GLib-GObject-WARNING **: 23:08:22.057: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:24288): GLib-GObject-CRITICAL **: 23:08:22.057: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+1605980302611	Marionette	INFO	Listening on port 37205
+1605980302686	Marionette	WARN	TLS certificate errors will be ignored for this session
+
+(/usr/lib/firefox/firefox:24414): Gtk-WARNING **: 23:08:23.651: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:24414): GLib-GObject-WARNING **: 23:08:24.124: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:24414): GLib-GObject-CRITICAL **: 23:08:24.124: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:24414): GLib-GObject-WARNING **: 23:08:24.126: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:24414): GLib-GObject-CRITICAL **: 23:08:24.126: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+JavaScript error: resource://gre/modules/URIFixup.jsm, line 271: NS_ERROR_FAILURE: Should pass a non-null uri
+1605980447838	Marionette	INFO	Stopped listening on port 37205
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
+1605982103669	geckodriver	INFO	Listening on 127.0.0.1:49119
+1605982103682	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "--width=800" "--height=800" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile5C1Fj5"
+/bin/sh: warning: setlocale: LC_ALL: cannot change locale (en-US)
+
+(firefox:39035): Gtk-WARNING **: 23:38:23.722: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:39151): Gtk-WARNING **: 23:38:25.302: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:39161): Gtk-WARNING **: 23:38:25.579: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:39151): GLib-GObject-WARNING **: 23:38:25.889: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:39151): GLib-GObject-CRITICAL **: 23:38:25.889: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:39151): GLib-GObject-WARNING **: 23:38:25.894: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:39151): GLib-GObject-CRITICAL **: 23:38:25.894: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+
+(/usr/lib/firefox/firefox:39161): GLib-GObject-WARNING **: 23:38:26.556: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:39161): GLib-GObject-CRITICAL **: 23:38:26.556: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:39161): GLib-GObject-WARNING **: 23:38:26.559: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:39161): GLib-GObject-CRITICAL **: 23:38:26.559: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+1605982107136	Marionette	INFO	Listening on port 45465
+1605982107220	Marionette	WARN	TLS certificate errors will be ignored for this session
+
+(/usr/lib/firefox/firefox:39280): Gtk-WARNING **: 23:38:29.114: Locale not supported by C library.
+	Using the fallback 'C' locale.
+
+(/usr/lib/firefox/firefox:39280): GLib-GObject-WARNING **: 23:38:29.601: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:39280): GLib-GObject-CRITICAL **: 23:38:29.601: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+
+(/usr/lib/firefox/firefox:39280): GLib-GObject-WARNING **: 23:38:29.602: invalid (NULL) pointer instance
+
+(/usr/lib/firefox/firefox:39280): GLib-GObject-CRITICAL **: 23:38:29.602: g_signal_connect_data: assertion 'G_TYPE_CHECK_INSTANCE (instance)' failed
+1605982203676	Marionette	INFO	Stopped listening on port 45465
+JavaScript error: , line 0: uncaught exception: Object
+JavaScript error: , line 0: uncaught exception: Object
