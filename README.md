@@ -35,8 +35,14 @@ A cross-platform super dope tool that attends Google Meet meetings for you while
 1. Clone this repository or download it as a .zip file (and extract its contents).
 2. Install all the requirements by navigating into the MeetGod folder and running the following command in the terminal.
 
+   For windows users
    ```
    pip install -r requirements.txt
+   ```
+
+   For macos/linux users
+   ```
+   pip3 install -r requirements.txt
    ```
 
 3. Run the `Bot.py` file from the terminal using the following command and result will be taken care by the bot
