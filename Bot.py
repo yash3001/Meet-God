@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.1.0"
+currentVersion = "v3.2.0"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -48,8 +48,9 @@ MENU1 = colored("""
     | 2: Show Schedule                     |
     | 3: Add more meetings                 |
     | 4: Update/Delete an existing meeting |
-    | 5: Exit and shutdown the bot         |
-    | 6: Show Processes                    |
+    | 5: Leave the current meeting(if any) |
+    | 6: Exit and shutdown the bot         |
+    | 7: Show number of running threads    |
      --------------------------------------""", 'cyan')
     
 MENU2 = colored("""
@@ -320,6 +321,112 @@ def attendProcess():
     meetProcessAlive = False
 
 
+# To determine the driver
+def determineDriver():
+    global BROWSER_DRIVER
+    clrscr()
+    if os.name == "posix":
+        while True:
+            choice = input("    What platform are you on?\n    1) Linux\n    2) Mac\n    > Answer(1 or 2): ")
+            if choice.lower() == "1" or choice.lower() == 'linux':
+                clrscr()
+                choice = input("    What is your architecture?\n    1) 64bit\n    2) 32bit\n    > Answer(1 or 2): ")
+                clrscr()
+                if choice.lower() == "1" or choice.lower() == '64bit':
+                    choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chromium\n    > Answer(1 or 2): ")
+                    if choice.lower() == "1" or choice.lower() == 'firefox':
+                        BROWSER_DRIVER = "FirefoxDrivers/linux64/geckodriver"
+                        break
+                    elif choice.lower() == "2" or choice.lower() == 'chromium':
+                        BROWSER_DRIVER = "ChromeDrivers/linux64/chromedriver"
+                        break
+                    else:
+                        print(colored("\n    Wrong input, try again", 'red'))
+                        time.sleep(3)
+                        clrscr()
+                        continue
+                elif choice.lower() == "2" or choice.lower() == '32bit':
+                    choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chromium\n    > Answer(1 or 2): ")
+                    if choice.lower() == "1" or choice.lower() == 'firefox':
+                        BROWSER_DRIVER = "FirefoxDrivers/linux32/geckodriver"
+                        break
+                    elif choice.lower() == "2" or choice.lower() == 'chromium':
+                        BROWSER_DRIVER = "ChromeDrivers/linux64/chromedriver"
+                        break
+                    else:
+                        print(colored("\n    Wrong input, try again", 'red'))
+                        time.sleep(3)
+                        clrscr()
+                        continue
+                else:
+                    print(colored("\n    Wrong input, try again", 'red'))
+                    time.sleep(3)
+                    clrscr()
+                    continue
+
+            elif choice.lower() == "2" or choice.lower() == 'mac':
+                clrscr()
+                choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chromium\n    > Answer(1 or 2): ")
+                if choice.lower() == "1" or choice.lower() == 'firefox':
+                    BROWSER_DRIVER = "FirefoxDrivers/mac64/geckodriver"
+                    break
+                elif choice.lower() == "2" or choice.lower() == 'chromium':
+                    BROWSER_DRIVER = "ChromeDrivers/mac64/chromedriver"
+                    break
+                else:
+                    print(colored("\n    Wrong input, try again", 'red'))
+                    time.sleep(3)
+                    clrscr()
+                    continue
+            else:
+                print(colored("\n    Wrong input, try again", 'red'))
+                time.sleep(3)
+                clrscr()
+                continue
+
+    elif os.name == 'nt':
+        while True:
+            choice = input("    What is your architecture?\n    1) 64bit\n    2) 32bit\n    > Answer(1 or 2): ")
+            if choice.lower() == "1" or choice.lower() == '64bit':
+                clrscr()
+                choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chrome\n    > Answer(1 or 2): ")
+                if choice.lower() == "1" or choice.lower() == 'firefox':
+                    BROWSER_DRIVER = "FirefoxDrivers/win64/geckodriver.exe"
+                    break
+                elif choice.lower() == "2" or choice.lower() == 'chromium':
+                    BROWSER_DRIVER = "ChromeDrivers/win32/chromedriver.exe"
+                    break
+                else:
+                    print(colored("    Wrong input, try again", 'red'))
+                    time.sleep(3)
+                    clrscr()
+                    continue
+            elif choice.lower() == "2" or choice.lower() == '32bit':
+                clrscr()
+                choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chrome\n    > Answer(1 or 2): ")
+                if choice.lower() == "1" or choice.lower() == 'firefox':
+                    BROWSER_DRIVER = "FirefoxDrivers/win32/geckodriver.exe"
+                    break
+                elif choice.lower() == "2" or choice.lower() == 'chromium':
+                    BROWSER_DRIVER = "ChromeDrivers/win32/chromedriver.exe"
+                    break
+                else:
+                    print(colored("    Wrong input, try again", 'red'))
+                    time.sleep(3)
+                    clrscr()
+                    continue
+            else:
+                print(colored("    Wrong input, try again", 'red'))
+                time.sleep(3)
+                clrscr()
+                continue
+
+    else:
+        print(colored("    Platform not supported\n    Exiting...", 'red'))
+        time.sleep(3)
+        exit()
+
+
 # To show the bot status
 def showStatus():
     global STATUS
@@ -445,6 +552,25 @@ def sortMeetings():
             MEET_LINK.pop(0)
 
 
+# To leave the current meeting(if any)
+def leaveCurrentMeeting():
+    global STATUS, e, meetProcessAlive
+    if STATUS == "Attending meeting":
+        e.set()
+        meetProcessAlive = False
+        time.sleep(0.5)
+        endMeet()
+        time.sleep(0.5)
+        e = threading.Event()
+        meetProcess = threading.Thread(target=attendProcess)
+        sortMeetings()
+        meetProcess.start()
+    else:
+        clrscr()
+        print(colored("You are not in a meeting currently", 'yellow'))
+        input(colored("Press enter to go back to the main menu", 'yellow'))
+
+
 # For clearing the terminal except the banner
 def clrscr():
     if os.name == 'posix':
@@ -485,8 +611,8 @@ if __name__ == "__main__":
 
         USERNAME = input("    > Enter the username for gmail account: ") if USERNAME == "" else USERNAME
         PASSWORD = getpass.getpass("    > Enter the password for your gmail account: ") if PASSWORD == "" else PASSWORD
-
         clrscr()
+
         if len(MEET_LINK) == 0:
             print("    Enter the meet schedule")
             addMeetings()
@@ -494,110 +620,10 @@ if __name__ == "__main__":
             sortMeetings()
 
         if len(BROWSER_DRIVER) == 0:
-            clrscr()
-            if os.name == "posix":
-                while True:
-                    choice = input("    What platform are you on?\n    1) Linux\n    2) Mac\n    > Answer(1 or 2): ")
-                    if choice.lower() == "1" or choice.lower() == 'linux':
-                        clrscr()
-                        choice = input("    What is your architecture?\n    1) 64bit\n    2) 32bit\n    > Answer(1 or 2): ")
-                        clrscr()
-                        if choice.lower() == "1" or choice.lower() == '64bit':
-                            choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chromium\n    > Answer(1 or 2): ")
-                            if choice.lower() == "1" or choice.lower() == 'firefox':
-                                BROWSER_DRIVER = "FirefoxDrivers/linux64/geckodriver"
-                                break
-                            elif choice.lower() == "2" or choice.lower() == 'chromium':
-                                BROWSER_DRIVER = "ChromeDrivers/linux64/chromedriver"
-                                break
-                            else:
-                                print(colored("\n    Wrong input, try again", 'red'))
-                                time.sleep(3)
-                                clrscr()
-                                continue
-                        elif choice.lower() == "2" or choice.lower() == '32bit':
-                            choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chromium\n    > Answer(1 or 2): ")
-                            if choice.lower() == "1" or choice.lower() == 'firefox':
-                                BROWSER_DRIVER = "FirefoxDrivers/linux32/geckodriver"
-                                break
-                            elif choice.lower() == "2" or choice.lower() == 'chromium':
-                                BROWSER_DRIVER = "ChromeDrivers/linux64/chromedriver"
-                                break
-                            else:
-                                print(colored("\n    Wrong input, try again", 'red'))
-                                time.sleep(3)
-                                clrscr()
-                                continue
-                        else:
-                            print(colored("\n    Wrong input, try again", 'red'))
-                            time.sleep(3)
-                            clrscr()
-                            continue
-
-                    elif choice.lower() == "2" or choice.lower() == 'mac':
-                        clrscr()
-                        choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chromium\n    > Answer(1 or 2): ")
-                        if choice.lower() == "1" or choice.lower() == 'firefox':
-                            BROWSER_DRIVER = "FirefoxDrivers/mac64/geckodriver"
-                            break
-                        elif choice.lower() == "2" or choice.lower() == 'chromium':
-                            BROWSER_DRIVER = "ChromeDrivers/mac64/chromedriver"
-                            break
-                        else:
-                            print(colored("\n    Wrong input, try again", 'red'))
-                            time.sleep(3)
-                            clrscr()
-                            continue
-                    else:
-                        print(colored("\n    Wrong input, try again", 'red'))
-                        time.sleep(3)
-                        clrscr()
-                        continue
-
-            elif os.name == 'nt':
-                while True:
-                    choice = input("    What is your architecture?\n    1) 64bit\n    2) 32bit\n    > Answer(1 or 2): ")
-                    if choice.lower() == "1" or choice.lower() == '64bit':
-                        clrscr()
-                        choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chrome\n    > Answer(1 or 2): ")
-                        if choice.lower() == "1" or choice.lower() == 'firefox':
-                            BROWSER_DRIVER = "FirefoxDrivers/win64/geckodriver.exe"
-                            break
-                        elif choice.lower() == "2" or choice.lower() == 'chromium':
-                            BROWSER_DRIVER = "ChromeDrivers/win32/chromedriver.exe"
-                            break
-                        else:
-                            print(colored("    Wrong input, try again", 'red'))
-                            time.sleep(3)
-                            clrscr()
-                            continue
-                    elif choice.lower() == "2" or choice.lower() == '32bit':
-                        clrscr()
-                        choice = input("    What Browser do you use?\n    1) Firefox\n    2) Chrome\n    > Answer(1 or 2): ")
-                        if choice.lower() == "1" or choice.lower() == 'firefox':
-                            BROWSER_DRIVER = "FirefoxDrivers/win32/geckodriver.exe"
-                            break
-                        elif choice.lower() == "2" or choice.lower() == 'chromium':
-                            BROWSER_DRIVER = "ChromeDrivers/win32/chromedriver.exe"
-                            break
-                        else:
-                            print(colored("    Wrong input, try again", 'red'))
-                            time.sleep(3)
-                            clrscr()
-                            continue
-                    else:
-                        print(colored("    Wrong input, try again", 'red'))
-                        time.sleep(3)
-                        clrscr()
-                        continue
-            
-            else:
-                print(colored("    Platform not supported\n    Exiting...", 'red'))
-                time.sleep(3)
-                exit()
+            determineDriver()
 
         driver = initBrowser()
-        wait = webdriver.support.ui.WebDriverWait(driver, 5)
+        wait = WebDriverWait(driver, 5)
         login()
         meetProcess = threading.Thread(target=attendProcess)
         meetProcess.start()
@@ -613,6 +639,8 @@ if __name__ == "__main__":
             elif ans == '4':
                 modifyMeeting()
             elif ans == '5':
+                leaveCurrentMeeting()
+            elif ans == '6':
                 clrscr()
                 print(colored("    Cleaning up and exiting...", 'green'))
                 try:
@@ -624,7 +652,7 @@ if __name__ == "__main__":
                 time.sleep(3)
                 clrscrAll()
                 break
-            elif ans == '6':
+            elif ans == '7':
                 showProcesses()
             else:
                 print(colored("    Wrong input, Try again", 'red'))
