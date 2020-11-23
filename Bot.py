@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.2.0"
+currentVersion = "v3.2.1"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -312,6 +312,7 @@ def attendProcess():
         else:
             return
     
+    time.sleep(0.5)
     clrscr()
     print(colored("\n\n    All Meets completed successfully.", 'green'))
     STATUS = "Idol"
@@ -567,8 +568,8 @@ def leaveCurrentMeeting():
         meetProcess.start()
     else:
         clrscr()
-        print(colored("You are not in a meeting currently", 'yellow'))
-        input(colored("Press enter to go back to the main menu", 'yellow'))
+        print(colored("    You are not in a meeting currently", 'yellow'))
+        input(colored("\n    [Press enter to go back to the main menu] ", 'yellow'))
 
 
 # For clearing the terminal except the banner
