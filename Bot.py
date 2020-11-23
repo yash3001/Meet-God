@@ -19,10 +19,10 @@ import re; import requests
 currentVersion = "v2.2.1"
 
 # Change these three variables to avoid typing again and again
-USERNAME = ""
-PASSWORD = ""
-MEET_LINK = []
-BROWSER_DRIVER = ""
+USERNAME = "4ni19cs123_b@nie.ac.in"
+PASSWORD = "30012001@Yash"
+MEET_LINK = ["https://meet.google.com/szj-mnaw-ktc 16:19:30"]
+BROWSER_DRIVER = "FirefoxDrivers/linux64/geckodriver"
 # Choose the browser driver from the list below
 #############################################################
 #                   Google Chrome                           #
@@ -90,6 +90,7 @@ listButtonCrossPath = "//button[@aria-label='Close']"
 studentNumberPath = "//span[@class='rua5Nb']"
 endButtonPath = "[aria-label='Leave call']"
 
+e = threading.Event()
 
 
 ####################################
@@ -256,22 +257,22 @@ def endMeet():
 
 # The seperate process that attends the meeting
 def attendProcess():
-    global MEET_LINK, STATUS, meetProcessAlive
+    global MEET_LINK, STATUS, meetProcessAlive, e
     meetProcessAlive = True
     while len(MEET_LINK) != 0:            
         if not meetProcessAlive:
-            break
+            return
         link = MEET_LINK[0]
         currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
         sleepTime = (int(link.split()[1].split(':')[0]) - currentTime[0])*3600 + (int(link.split()[1].split(':')[1]) - currentTime[1])*60 + (int(link.split()[1].split(':')[2]) - currentTime[2])
         STATUS = "Waiting for next meeting"
         if sleepTime > 0:
-            start = time.time()
-            while int(time.time() - start) < sleepTime:
-                if not meetProcessAlive:
-                    break
-                time.sleep(1)
+            check = not e.wait(timeout=sleepTime)
+            if not check:
+                meetProcessAlive = False
+                return
         else:
+            time.sleep(1)
             clrscr()
             print(colored("    Omiting the next meeting because time is negative", 'yellow'))
             MEET_LINK.pop(0)
@@ -282,33 +283,31 @@ def attendProcess():
         if meetProcessAlive:
             attendMeet(link.split()[0])
             MEET_LINK.pop(0)
-            sleepTime = 1200
-            while int(time.time() - start) < sleepTime:
-                if not meetProcessAlive:
-                    break
-                time.sleep(1)
+            # sleepTime = 1200
+            # result = e.wait(timeout=sleepTime)
+            # if not result:
+            #     meetProcessAlive = False
             while True:
                 if meetProcessAlive:
                     numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
                     numPeople = int(str(numPeople[1:-1]))
-                    if numPeople < 20:
+                    if numPeople < 2:
                         endMeet()
                         break
                     else:
                         time.sleep(2)
                 else:
-                    break
+                    return
         else:
-            break
+            return
     
-    if meetProcessAlive:
-        clrscr()
-        print(colored("\n\n    All Meets completed successfully.", 'green'))
-        STATUS = "idol"
-        time.sleep(2)
-        clrscr()
-        print(MENU, end="")
-        meetProcessAlive = False
+    clrscr()
+    print(colored("\n\n    All Meets completed successfully.", 'green'))
+    STATUS = "Idol"
+    time.sleep(2)
+    clrscr()
+    print(MENU, end="")
+    meetProcessAlive = False
 
 
 # To show the bot status
@@ -333,7 +332,7 @@ def showSchedule():
 
 # To add more meetings
 def addMeetings():
-    global MEET_LINK, STATUS, meetProcessAlive
+    global MEET_LINK, STATUS, e, meetProcess
     flag = 'y'
     clrscr()
     while flag.lower() == "y" or flag.lower() == "yes":
@@ -341,22 +340,25 @@ def addMeetings():
         timming = input("    > Enter the time for joining in 24 hour format (HH:MM:SS): ")
         MEET_LINK.append(url.strip()+" "+timming.strip())
         flag = input(colored("\n    Meeting added successfully.\n\n    > Add new meeting? (y/N): ", 'green'))
-    if len(threading.active_count()) == 1 and STATUS != "Starting":
-        meetProcess = threading.Thread(target=attendProcess)
+    if threading.active_count() == 1 and STATUS == "Idol":
         sortMeetings()
-        meetProcess.start()
-    if STATUS == "Waiting for next meeting":
-        meetProcessAlive = False
-        time.sleep(2)
         meetProcess = threading.Thread(target=attendProcess)
-        sortMeetings()
         meetProcess.start()
+        return
+    elif STATUS == "Waiting for next meeting":
+        e.set()
+        time.sleep(0.5)
+        sortMeetings()
+        e = threading.Event()
+        meetProcess = threading.Thread(target=attendProcess)
+        meetProcess.start()
+        return
     sortMeetings()
 
 
 # To modify or delete a meeting
 def modifyMeeting():
-    global MEET_LINK, STATUS, meetProcessAlive
+    global MEET_LINK, STATUS, meetProcessAlive, e
     choice = '1'
     while choice != '0':
         clrscr()
@@ -383,8 +385,9 @@ def modifyMeeting():
                 newTime = input("\n    > Enter the new timings: ").strip()
                 MEET_LINK[index] = MEET_LINK[index].split()[0] + " " + newTime
                 if index == 0 and STATUS == "Waiting for next meeting":
-                    meetProcessAlive = False
-                    time.sleep(2)
+                    e.set()
+                    time.sleep(0.5)
+                    e = threading.Event()
                     meetProcess = threading.Thread(target=attendProcess)
                     sortMeetings()
                     meetProcess.start()
@@ -393,8 +396,9 @@ def modifyMeeting():
             elif choice == "3":
                 MEET_LINK.pop(index)
                 if index == 0 and STATUS == "Waiting for next meeting":
-                    meetProcessAlive = False
-                    time.sleep(2)
+                    e.set()
+                    time.sleep(0.5)
+                    e = threading.Event()
                     meetProcess = threading.Thread(target=attendProcess)
                     meetProcess.start()
                 break
@@ -451,7 +455,7 @@ def clrscrAll():
 # To show the running processes (for developement purposes)
 def showProcesses():
     clrscr()
-    print(len(threading.active_count()))
+    print(threading.active_count())
     input(colored("\n\n    > [Press enter to go back to the main menu] ", 'green'))
 
 
@@ -587,7 +591,6 @@ if __name__ == "__main__":
         login()
         meetProcess = threading.Thread(target=attendProcess)
         meetProcess.start()
-
         while True:
             clrscr()
             ans = input(MENU)
@@ -607,6 +610,7 @@ if __name__ == "__main__":
                 except Exception:
                     pass
                 meetProcessAlive = False
+                e.set()
                 time.sleep(3)
                 clrscrAll()
                 break
@@ -630,18 +634,20 @@ if __name__ == "__main__":
         except Exception:
             pass
         meetProcessAlive = False
+        e.set()
         time.sleep(3)
         clrscrAll()
 
-    except Exception:
-        print(colored("    An error occured", 'red'))
-        print(colored("    Press Enter to exit.", 'red'))
-        input()
-        print(colored("    Cleaning up and exiting...", 'red'))
-        try:
-            driver.quit()
-        except Exception:
-            pass
-        meetProcessAlive = False
-        time.sleep(3)
-        clrscrAll()
+    # except Exception:
+    #     print(colored("    An error occured", 'red'))
+    #     print(colored("    Press Enter to exit.", 'red'))
+    #     input()
+    #     print(colored("    Cleaning up and exiting...", 'red'))
+    #     try:
+    #         driver.quit()
+    #     except Exception:
+    #         pass
+    #     meetProcessAlive = False
+    #     e.set()
+    #     time.sleep(3)
+    #     clrscrAll()
