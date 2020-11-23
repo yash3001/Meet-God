@@ -16,7 +16,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v2.2.1"
+currentVersion = "v3.0.0"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
