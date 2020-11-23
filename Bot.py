@@ -6,6 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as when
 from selenium.webdriver.common.by import By as by
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
 import time; import getpass; import datetime; import threading; import os
 from termcolor import colored
 import re; import requests
@@ -16,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.0.0"
+currentVersion = "v3.1.0"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -83,6 +84,7 @@ usernameFieldPath = "identifierId"
 usernameNextButtonPath = "identifierNext"
 passwordFieldPath = "password"
 passwordNextButtonPath = "passwordNext"
+camMicBlockedDismiss = '//div[@class="U26fgb O0WRkf oG5Srb HQ8yf C0oVfc kHssdc HvOprf DEhM1b M9Bg4d"]'
 joinButton1Path = "//span[contains(text(), 'Join')]"
 joinButton2Path = "//span[contains(text(), 'Ask to join')]"
 listButtonPath = "//div[@aria-label='Chat with everyone']"
@@ -208,6 +210,14 @@ def attendMeet(link):
     print(colored("    Success!", 'green'))
     print("\n    Entering Google Meet... ")
     driver.get(link)
+
+    if BROWSER_DRIVER.lower().startswith("chrome"):
+        try:
+            dismissButton = WebDriverWait(driver, 5).until(when.presence_of_element_located((by.XPATH, camMicBlockedDismiss)))
+            time.sleep(1)
+            dismissButton.click()
+        except Exception:
+            pass
 
     try:
         joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
@@ -638,16 +648,16 @@ if __name__ == "__main__":
         time.sleep(3)
         clrscrAll()
 
-    # except Exception:
-    #     print(colored("    An error occured", 'red'))
-    #     print(colored("    Press Enter to exit.", 'red'))
-    #     input()
-    #     print(colored("    Cleaning up and exiting...", 'red'))
-    #     try:
-    #         driver.quit()
-    #     except Exception:
-    #         pass
-    #     meetProcessAlive = False
-    #     e.set()
-    #     time.sleep(3)
-    #     clrscrAll()
+    except Exception:
+        print(colored("    An error occured", 'red'))
+        print(colored("    Press Enter to exit.", 'red'))
+        input()
+        print(colored("    Cleaning up and exiting...", 'red'))
+        try:
+            driver.quit()
+        except Exception:
+            pass
+        meetProcessAlive = False
+        e.set()
+        time.sleep(3)
+        clrscrAll()
