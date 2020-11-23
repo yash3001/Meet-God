@@ -44,7 +44,7 @@ A cross-platform super dope tool that attends Google Meet meetings for you while
    For windows users:
 
    ```
-   python3 Bot.py
+   python Bot.py
    ```
 
    For macos/linux users:
