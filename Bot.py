@@ -19,10 +19,10 @@ import re; import requests
 currentVersion = "v2.2.1"
 
 # Change these three variables to avoid typing again and again
-USERNAME = "4ni19cs123_b@nie.ac.in"
-PASSWORD = "30012001@Yash"
-MEET_LINK = ["https://meet.google.com/szj-mnaw-ktc 16:19:30"]
-BROWSER_DRIVER = "FirefoxDrivers/linux64/geckodriver"
+USERNAME = ""
+PASSWORD = ""
+MEET_LINK = []
+BROWSER_DRIVER = ""
 # Choose the browser driver from the list below
 #############################################################
 #                   Google Chrome                           #
