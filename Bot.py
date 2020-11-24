@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.2.4"
+currentVersion = "v3.3.0"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -87,7 +87,8 @@ usernameFieldPath = "identifierId"
 usernameNextButtonPath = "identifierNext"
 passwordFieldPath = "password"
 passwordNextButtonPath = "passwordNext"
-camMicBlockedDismiss = '//div[@class="U26fgb O0WRkf oG5Srb HQ8yf C0oVfc kHssdc HvOprf DEhM1b M9Bg4d"]'
+micBlockPath = "//div[@aria-label='Turn off microphone (ctrl + d)']"
+cameraBlockPath = "//div[@aria-label='Turn off camera (ctrl + e)']"
 joinButton1Path = "//span[contains(text(), 'Join')]"
 joinButton2Path = "//span[contains(text(), 'Ask to join')]"
 listButtonPath = "//div[@aria-label='Chat with everyone']"
@@ -138,12 +139,13 @@ def initBrowser():
         chromeOptions.add_argument("--disable-extensions")
         chromeOptions.add_argument("--window-size=800,800")
         chromeOptions.add_argument("--incognito")
+        chromeOptions.add_argument("use-fake-device-for-media-stream")
+        chromeOptions.add_argument("use-fake-ui-for-media-stream")
         chromeOptions.add_experimental_option('excludeSwitches', ['enable-logging'])
-        chromeOptions.add_experimental_option("prefs", {"profile.default_content_setting_values.media_stream_mic": 2,
-                                                        "profile.default_content_setting_values.media_stream_camera": 2,
-                                                        "profile.default_content_setting_values.notifications": 2
-                                                        })
-        chromeOptions.add_argument("--mute-audio")
+        # chromeOptions.add_experimental_option("prefs", {"profile.default_content_setting_values.media_stream_mic": 1,
+        #                                                 "profile.default_content_setting_values.media_stream_camera": 1,
+        #                                                 "profile.default_content_setting_values.notifications": 1
+        #                                                 })
 
         driver = webdriver.Chrome(executable_path=BROWSER_DRIVER, options=chromeOptions)
     
@@ -214,18 +216,19 @@ def attendMeet(link):
     print("\n    Entering Google Meet... ")
     driver.get(link)
 
-    if BROWSER_DRIVER.lower().startswith("chrome"):
-        try:
-            dismissButton = WebDriverWait(driver, 5).until(when.presence_of_element_located((by.XPATH, camMicBlockedDismiss)))
-            time.sleep(1)
-            dismissButton.click()
-        except Exception:
-            pass
-
     try:
         joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
     except:
         joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton2Path)))
+
+    if BROWSER_DRIVER.lower().startswith("chrome"):
+        micBlockButton = driver.find_element_by_xpath(micBlockPath)
+        cameraBlockButton = driver.find_element_by_xpath(cameraBlockPath)
+        time.sleep(0.5)
+        cameraBlockButton.click()
+        time.sleep(0.5)
+        micBlockButton.click()
+
     time.sleep(1)
     joinButton.click()
 
@@ -296,7 +299,7 @@ def attendProcess():
         if meetProcessAlive:
             attendMeet(link.split()[0])
             MEET_LINK.pop(0)
-            result = e.wait(timeout=MEET_SLEEP_TIME)
+            result = not e.wait(timeout=MEET_SLEEP_TIME)
             if not result:
                 meetProcessAlive = False
             while True:
@@ -602,7 +605,7 @@ def showProcesses():
 ####### Main function #######
 #############################
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     try:
         versionCheck()
         clrscr()
