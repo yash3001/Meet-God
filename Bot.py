@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.2.3"
+currentVersion = "v3.2.4"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -121,7 +121,7 @@ def versionCheck():
         time.sleep(3)
     elif currentVersion < latestVersion:
         print(colored("\n    You are using an older version of MeetGod.", "red"))
-        print(colored("    Get the latest version at https://github.com/yash3001/youtube/tree/master/Meet%20Bot", "yellow"))
+        print(colored("    Get the latest version at https://raw.githubusercontent.com/yash3001/Meet-God/master/version.txt", "yellow"))
         print(colored("    Every new version comes with fixes, improvements, new features, etc..", "yellow"))
         time.sleep(7)
 
