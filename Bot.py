@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.2.2"
+currentVersion = "v3.2.3"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -39,6 +39,7 @@ BROWSER_DRIVER = ""
 #   Windows (x64): "FirefoxDrivers/win64/geckodriver.exe"   #
 #############################################################
 MEET_SLEEP_TIME = 1200
+END_PARTICIPANTS = 20
     
 STATUS = "Starting"
 MENU1 = colored("""
@@ -302,7 +303,7 @@ def attendProcess():
                 if meetProcessAlive:
                     numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
                     numPeople = int(str(numPeople[1:-1]))
-                    if numPeople < 2:
+                    if numPeople < END_PARTICIPANTS:
                         endMeet()
                         break
                     else:
