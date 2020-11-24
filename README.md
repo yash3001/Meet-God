@@ -35,12 +35,14 @@ A cross-platform super dope tool that attends Google Meet meetings for you while
 1. Clone this repository or download it as a .zip file (and extract its contents).
 2. Install all the requirements by navigating into the MeetGod folder and running the following command in the terminal.
 
-   For windows users
+   For windows users:
+
    ```
    pip install -r requirements.txt
    ```
 
-   For macos/linux users
+   For macos/linux users:
+
    ```
    pip3 install -r requirements.txt
    ```
@@ -63,11 +65,12 @@ A cross-platform super dope tool that attends Google Meet meetings for you while
 
 ## Tips to use MeetGod Easily and Efficiently
 
-Even though everything will be taken care when the Bot.py is executed, still here are some variables that you can fill before running the Bot.py so that you don't have to type the details again and again when the bot is ran multiple time
+Even though everything will be taken care when the Bot.py is executed, still here are some variables that you can fill before running the Bot.py so that you don't have to type the details again and again when the bot is ran multiple times
 
 1. Enter you username/email in the `USERNAME` variable on line 23
 2. Enter your password in the `PASSWORD` variable on line 24
 3. Enter the meet link and the time to join the meet(in 24 hour format) as one string in the list variable `MEET_LINK` on line 25. For example: `MEET_LINK = ["https://meet.google.com/uza-jkad-qwe 10:30:00", "https://meet.google.com/qwe-dsds-fio 16:00:00"]`
 4. Choose the browser driver based on your system and browser and put it in the `BROWSER_DRIVER` variable on line 26 (Take help from the list given below the variable)
+5. By default the bot sleeps for 20 mins after entering the meeting and then starts checking if the meeting has ended. You can change the default sleeping time by changing the `MEET_SLEEP_TIME` variable on line 41. (By default 1200secs = 20mins)
 
 ![substitution](images/substitutes.png)

@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.2.1"
+currentVersion = "v3.2.2"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -38,6 +38,7 @@ BROWSER_DRIVER = ""
 #   Windows (x32): "FirefoxDrivers/win32/geckodriver.exe"   #
 #   Windows (x64): "FirefoxDrivers/win64/geckodriver.exe"   #
 #############################################################
+MEET_SLEEP_TIME = 1200
     
 STATUS = "Starting"
 MENU1 = colored("""
@@ -268,7 +269,7 @@ def endMeet():
 
 # The seperate process that attends the meeting
 def attendProcess():
-    global MEET_LINK, STATUS, meetProcessAlive, e
+    global MEET_LINK, STATUS, MEET_SLEEP_TIME, meetProcessAlive, e
     meetProcessAlive = True
     while len(MEET_LINK) != 0:            
         if not meetProcessAlive:
@@ -294,10 +295,9 @@ def attendProcess():
         if meetProcessAlive:
             attendMeet(link.split()[0])
             MEET_LINK.pop(0)
-            # sleepTime = 1200
-            # result = e.wait(timeout=sleepTime)
-            # if not result:
-            #     meetProcessAlive = False
+            result = e.wait(timeout=MEET_SLEEP_TIME)
+            if not result:
+                meetProcessAlive = False
             while True:
                 if meetProcessAlive:
                     numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
