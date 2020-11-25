@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.3.0"
+currentVersion = "v3.4.0"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -209,7 +209,7 @@ def login():
 
 # To navigate to the meeting link and enter the meeting
 def attendMeet(link):
-    global STATUS
+    global STATUS, BROWSER_DRIVER
     clrscr()
     print("\n    Navigating to Google Meet... ")
     print(colored("    Success!", 'green'))
@@ -605,7 +605,7 @@ def showProcesses():
 ####### Main function #######
 #############################
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     try:
         versionCheck()
         clrscr()
