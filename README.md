@@ -50,7 +50,7 @@ A cross-platform super dope tool that attends Google Meet meetings for you while
    pip3 install -r requirements.txt
    ```
 
-3. Run the `Bot.py` file from the terminal using the following command and result will be taken care by the bot
+3. Run the `Bot.py` file from the terminal using the following command and rest will be taken care by the bot
 
    For windows users:
 
