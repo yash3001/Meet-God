@@ -319,7 +319,7 @@ def attendProcess():
     time.sleep(0.5)
     clrscr()
     print(colored("\n\n    All Meets completed successfully.", 'green'))
-    STATUS = "Idol"
+    STATUS = "Idle"
     time.sleep(2)
     clrscr()
     print(MENU, end="")
@@ -462,7 +462,7 @@ def addMeetings():
         timming = input("    > Enter the time for joining in 24 hour format (HH:MM:SS): ")
         MEET_LINK.append(url.strip()+" "+timming.strip())
         flag = input(colored("\n    Meeting added successfully.\n\n    > Add new meeting? (y/N): ", 'green'))
-    if threading.active_count() == 1 and STATUS == "Idol":
+    if threading.active_count() == 1 and STATUS == "Idle":
         sortMeetings()
         meetProcess = threading.Thread(target=attendProcess)
         meetProcess.start()
