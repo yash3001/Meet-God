@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.4.1"
+currentVersion = "v3.5.0"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -57,7 +57,7 @@ MENU1 = colored("""
     
 MENU2 = colored("""
     
-    > Choice: """, 'green')
+    > Choice(1-7): """, 'green')
     
 MENU = MENU1 + MENU2
     
@@ -244,8 +244,8 @@ def attendMeet(link):
 
     while True:
         try:
-            list = driver.find_element_by_xpath(listButtonPath)
-            list.click()
+            listButton = driver.find_element_by_xpath(listButtonPath)
+            listButton.click()
             break
         except Exception:
             time.sleep(1)
@@ -304,7 +304,17 @@ def attendProcess():
                 meetProcessAlive = False
             while True:
                 if meetProcessAlive:
-                    numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
+                    try:
+                        numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
+                    except Exception:
+                        try:
+                            listButton = driver.find_element_by_xpath(listButtonPath)
+                            listButton.click()
+                            time.sleep(1)
+                            numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
+                        except Exception:
+                            time.sleep(2)
+                            continue
                     numPeople = int(str(numPeople[1:-1]))
                     if numPeople < END_PARTICIPANTS:
                         endMeet()
@@ -596,7 +606,7 @@ def clrscrAll():
 # To show the running processes (for developement purposes)
 def showProcesses():
     clrscr()
-    print(threading.active_count())
+    print("   ", threading.active_count())
     input(colored("\n\n    > [Press enter to go back to the main menu] ", 'green'))
 
 
