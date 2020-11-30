@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.5.0"
+currentVersion = "v3.6.0"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -48,16 +48,17 @@ MENU1 = colored("""
     |--------------------------------------|
     | 1: Show bot status                   |
     | 2: Show Schedule                     |
-    | 3: Add more meetings                 |
-    | 4: Update/Delete an existing meeting |
-    | 5: Leave the current meeting(if any) |
-    | 6: Exit and shutdown the bot         |
-    | 7: Show number of running threads    |
+    | 3: Show time until next meeting      |
+    | 4: Add more meetings                 |
+    | 5: Update/Delete an existing meeting |
+    | 6: Leave the current meeting(if any) |
+    | 7: Exit and shutdown the bot         |
+    | 8: Show number of running threads    |
      --------------------------------------""", 'cyan')
     
 MENU2 = colored("""
     
-    > Choice(1-7): """, 'green')
+    > Choice(1-8): """, 'green')
     
 MENU = MENU1 + MENU2
     
@@ -462,6 +463,35 @@ def showSchedule():
     input(colored("\n\n    > [Press Enter to go back to the main menu] ", 'green'))
 
 
+# To show the remaining time until next meeting
+def showRemainingTime():
+    flag = True
+    def printTime():
+        global MEET_LINK
+        if len(MEET_LINK) > 0:
+            while(flag == True):
+                clrscr()
+                currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
+                remainingTime = (int(MEET_LINK[0].split()[1].split(':')[0]) - currentTime[0])*3600 + (int(MEET_LINK[0].split()[1].split(':')[1]) - currentTime[1])*60 + (int(MEET_LINK[0].split()[1].split(':')[2]) - currentTime[2])
+                seconds = f" {remainingTime % 60} secs"
+                minutes = f" {remainingTime//60} mins" if remainingTime//60 > 0 else ""
+                hours = f" {remainingTime//3600} hrs" if remainingTime//3600 > 0 else ""
+                days = f" {remainingTime//86400} days" if remainingTime//86400 > 0 else ""
+                print(colored(f"    Remaining time:{days}{hours}{minutes}{seconds}", 'yellow'))
+                print(colored("\n\n    > [Press Enter to go back to the main menu] ", 'green'), end="")
+                time.sleep(1)
+        else:
+            clrscr()
+            print(colored("    No meetings scheduled currently", 'yellow'))
+            print(colored("\n\n    > [Press Enter to go back to the main menu] ", 'green'), end="")
+    
+    printTimeThread = threading.Thread(target=printTime)
+    printTimeThread.start()
+    input()
+    flag = False
+    printTimeThread.join()
+
+
 # To add more meetings
 def addMeetings():
     global MEET_LINK, STATUS, e, meetProcess
@@ -650,12 +680,14 @@ if __name__ == "__main__":
             elif ans == '2':
                 showSchedule()
             elif ans == '3':
-                addMeetings()
+                showRemainingTime()
             elif ans == '4':
-                modifyMeeting()
+                addMeetings()
             elif ans == '5':
-                leaveCurrentMeeting()
+                modifyMeeting()
             elif ans == '6':
+                leaveCurrentMeeting()
+            elif ans == '7':
                 clrscr()
                 print(colored("    Cleaning up and exiting...", 'green'))
                 try:
@@ -667,7 +699,7 @@ if __name__ == "__main__":
                 time.sleep(3)
                 clrscrAll()
                 break
-            elif ans == '7':
+            elif ans == '8':
                 showProcesses()
             else:
                 print(colored("    Wrong input, Try again", 'red'))
