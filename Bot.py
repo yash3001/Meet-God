@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.6.0"
+currentVersion = "v3.6.1"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -91,6 +91,7 @@ passwordNextButtonPath = "passwordNext"
 micBlockPath = "//div[@aria-label='Turn off microphone (ctrl + d)']"
 cameraBlockPath = "//div[@aria-label='Turn off camera (ctrl + e)']"
 joinButton1Path = "//span[contains(text(), 'Join')]"
+statusPath = "//div[@role='status']"
 joinButton2Path = "//span[contains(text(), 'Ask to join')]"
 listButtonPath = "//div[@aria-label='Chat with everyone']"
 listButtonCrossPath = "//button[@aria-label='Close']"
@@ -219,6 +220,18 @@ def attendMeet(link):
 
     try:
         joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
+        status = driver.find_element_by_xpath(statusPath).get_attribute('textContent')
+        if status == "No one else is here":
+            print(colored("\n    No one is in the meeting, sleeping for 5 minutes for the last time then skipping", 'red'))
+            time.sleep(5)
+            clrscr()
+            print(MENU, end="")
+            time.sleep(300)
+            if status == "No one else is here":
+                clrscr()
+                print(colored("\n    Omiting the current meeting because of timout error", 'red'))
+                time.sleep(5)
+                return 0
     except:
         joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton2Path)))
 
@@ -256,6 +269,7 @@ def attendMeet(link):
     time.sleep(2)
     clrscr()
     print(MENU, end="")
+    return 1
 
 
 # To exit the meeting after ending
@@ -298,8 +312,10 @@ def attendProcess():
             print(MENU, end="")
             continue
         if meetProcessAlive:
-            attendMeet(link.split()[0])
+            flag = attendMeet(link.split()[0])
             MEET_LINK.pop(0)
+            if not flag:
+                continue
             result = not e.wait(timeout=MEET_SLEEP_TIME)
             if not result:
                 meetProcessAlive = False
@@ -469,17 +485,23 @@ def showRemainingTime():
     def printTime():
         global MEET_LINK
         if len(MEET_LINK) > 0:
-            while(flag == True):
+            currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
+            remainingTime = (int(MEET_LINK[0].split()[1].split(':')[0]) - currentTime[0])*3600 + (int(MEET_LINK[0].split()[1].split(':')[1]) - currentTime[1])*60 + (int(MEET_LINK[0].split()[1].split(':')[2]) - currentTime[2])
+            if remainingTime > 0:
+                while(flag == True):
+                    clrscr()
+                    currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
+                    remainingTime = (int(MEET_LINK[0].split()[1].split(':')[0]) - currentTime[0])*3600 + (int(MEET_LINK[0].split()[1].split(':')[1]) - currentTime[1])*60 + (int(MEET_LINK[0].split()[1].split(':')[2]) - currentTime[2])
+                    seconds = f" {remainingTime % 60} secs"
+                    minutes = f" {remainingTime//60} mins" if remainingTime//60 > 0 else ""
+                    hours = f" {remainingTime//3600} hrs" if remainingTime//3600 > 0 else ""
+                    days = f" {remainingTime//86400} days" if remainingTime//86400 > 0 else ""
+                    print(colored(f"    Remaining time:{days}{hours}{minutes}{seconds}", 'yellow'))
+                    print(colored("\n\n    > [Press Enter to go back to the main menu] ", 'green'), end="")
+                    time.sleep(1)
+            else:
                 clrscr()
-                currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
-                remainingTime = (int(MEET_LINK[0].split()[1].split(':')[0]) - currentTime[0])*3600 + (int(MEET_LINK[0].split()[1].split(':')[1]) - currentTime[1])*60 + (int(MEET_LINK[0].split()[1].split(':')[2]) - currentTime[2])
-                seconds = f" {remainingTime % 60} secs"
-                minutes = f" {remainingTime//60} mins" if remainingTime//60 > 0 else ""
-                hours = f" {remainingTime//3600} hrs" if remainingTime//3600 > 0 else ""
-                days = f" {remainingTime//86400} days" if remainingTime//86400 > 0 else ""
-                print(colored(f"    Remaining time:{days}{hours}{minutes}{seconds}", 'yellow'))
-                print(colored("\n\n    > [Press Enter to go back to the main menu] ", 'green'), end="")
-                time.sleep(1)
+                print(colored("\n    Waiting for extra 5 minutes to join the meeting as no one is there", 'yellow'))   
         else:
             clrscr()
             print(colored("    No meetings scheduled currently", 'yellow'))
@@ -672,6 +694,7 @@ if __name__ == "__main__":
         login()
         meetProcess = threading.Thread(target=attendProcess)
         meetProcess.start()
+        meetProcess.setDaemon(True)
         while True:
             clrscr()
             ans = input(MENU)
@@ -705,7 +728,7 @@ if __name__ == "__main__":
                 print(colored("    Wrong input, Try again", 'red'))
                 time.sleep(3)
 
-        meetProcess.join()
+        # meetProcess.join()
         
 
     except KeyboardInterrupt:
