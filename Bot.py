@@ -219,7 +219,7 @@ def attendMeet(link):
     driver.get(link)
 
     try:
-        joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
+        joinButton = WebDriverWait(driver, 10).until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
         status = driver.find_element_by_xpath(statusPath).get_attribute('textContent')
         if status == "No one else is here":
             print(colored("\n    No one is in the meeting, sleeping for 5 minutes for the last time then skipping", 'red'))
@@ -233,7 +233,7 @@ def attendMeet(link):
                 time.sleep(5)
                 return 0
     except:
-        joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton2Path)))
+        joinButton = WebDriverWait(driver, 10).until(when.element_to_be_clickable((by.XPATH, joinButton2Path)))
 
     if BROWSER_DRIVER.lower().startswith("chrome"):
         micBlockButton = driver.find_element_by_xpath(micBlockPath)
