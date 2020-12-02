@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.6.1"
+currentVersion = "v3.6.2"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -227,6 +227,7 @@ def attendMeet(link):
             clrscr()
             print(MENU, end="")
             time.sleep(300)
+            status = driver.find_element_by_xpath(statusPath).get_attribute('textContent')
             if status == "No one else is here":
                 clrscr()
                 print(colored("\n    Omiting the current meeting because of timout error", 'red'))
