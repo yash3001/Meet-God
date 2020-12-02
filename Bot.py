@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.6.3"
+currentVersion = "v3.6.4"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -140,6 +140,7 @@ def initBrowser():
         chromeOptions.add_argument("--disable-gpu")
         chromeOptions.add_argument("--disable-extensions")
         chromeOptions.add_argument("--window-size=800,800")
+        # chromeOptions.add_argument("--headless")
         chromeOptions.add_argument("--incognito")
         chromeOptions.add_argument("use-fake-device-for-media-stream")
         chromeOptions.add_argument("use-fake-ui-for-media-stream")
