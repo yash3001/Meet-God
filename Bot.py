@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.6.2"
+currentVersion = "v3.6.3"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -218,23 +218,39 @@ def attendMeet(link):
     print("\n    Entering Google Meet... ")
     driver.get(link)
 
-    try:
-        joinButton = WebDriverWait(driver, 10).until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
-        status = driver.find_element_by_xpath(statusPath).get_attribute('textContent')
-        if status == "No one else is here":
-            print(colored("\n    No one is in the meeting, sleeping for 5 minutes for the last time then skipping", 'red'))
-            time.sleep(5)
-            clrscr()
-            print(MENU, end="")
-            time.sleep(300)
+    def join():
+        global joinButton
+        try:
+            joinButton = WebDriverWait(driver, 10).until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
             status = driver.find_element_by_xpath(statusPath).get_attribute('textContent')
             if status == "No one else is here":
-                clrscr()
-                print(colored("\n    Omiting the current meeting because of timout error", 'red'))
+                print(colored("\n    No one is in the meeting, sleeping for 5 minutes for the last time then skipping", 'red'))
                 time.sleep(5)
-                return 0
-    except:
-        joinButton = WebDriverWait(driver, 10).until(when.element_to_be_clickable((by.XPATH, joinButton2Path)))
+                clrscr()
+                print(MENU, end="")
+                time.sleep(300)
+                status = driver.find_element_by_xpath(statusPath).get_attribute('textContent')
+                if status == "No one else is here":
+                    clrscr()
+                    print(colored("\n    Omiting the current meeting because of timout error", 'red'))
+                    time.sleep(5)
+                    return 0
+        except Exception:
+            pass
+
+    def askToJoin():
+        global joinButton
+        try:
+            joinButton = WebDriverWait(driver, 10).until(when.element_to_be_clickable((by.XPATH, joinButton2Path)))
+        except Exception:
+            pass
+
+    join1 = threading.Thread(target=join)
+    join2 = threading.Thread(target=askToJoin)
+    join1.setDaemon(True)
+    join2.setDaemon(True)
+    join1.start()
+    join2.start()
 
     if BROWSER_DRIVER.lower().startswith("chrome"):
         micBlockButton = driver.find_element_by_xpath(micBlockPath)
@@ -245,7 +261,13 @@ def attendMeet(link):
         micBlockButton.click()
 
     time.sleep(1)
-    joinButton.click()
+    while True:
+        global joinButton
+        try:
+            joinButton.click()
+            break
+        except Exception:
+            time.sleep(2)
 
     print(colored("    Success!", 'green'))
     time.sleep(1)
@@ -694,8 +716,8 @@ if __name__ == "__main__":
         wait = WebDriverWait(driver, 5)
         login()
         meetProcess = threading.Thread(target=attendProcess)
-        meetProcess.start()
         meetProcess.setDaemon(True)
+        meetProcess.start()
         while True:
             clrscr()
             ans = input(MENU)
@@ -747,16 +769,16 @@ if __name__ == "__main__":
         time.sleep(3)
         clrscrAll()
 
-    except Exception:
-        print(colored("    An error occured", 'red'))
-        print(colored("    Press Enter to exit.", 'red'))
-        input()
-        print(colored("    Cleaning up and exiting...", 'red'))
-        try:
-            driver.quit()
-        except Exception:
-            pass
-        meetProcessAlive = False
-        e.set()
-        time.sleep(3)
-        clrscrAll()
+    # except Exception:
+    #     print(colored("    An error occured", 'red'))
+    #     print(colored("    Press Enter to exit.", 'red'))
+    #     input()
+    #     print(colored("    Cleaning up and exiting...", 'red'))
+    #     try:
+    #         driver.quit()
+    #     except Exception:
+    #         pass
+    #     meetProcessAlive = False
+    #     e.set()
+    #     time.sleep(3)
+    #     clrscrAll()
