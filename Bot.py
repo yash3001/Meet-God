@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.6.4"
+currentVersion = "v3.6.5"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -219,10 +219,9 @@ def attendMeet(link):
     print("\n    Entering Google Meet... ")
     driver.get(link)
 
-    def join():
-        global joinButton
+    while True:
         try:
-            joinButton = WebDriverWait(driver, 10).until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
+            joinButton = WebDriverWait(driver, 2).until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
             status = driver.find_element_by_xpath(statusPath).get_attribute('textContent')
             if status == "No one else is here":
                 print(colored("\n    No one is in the meeting, sleeping for 5 minutes for the last time then skipping", 'red'))
@@ -236,22 +235,15 @@ def attendMeet(link):
                     print(colored("\n    Omiting the current meeting because of timout error", 'red'))
                     time.sleep(5)
                     return 0
+            break
         except Exception:
             pass
 
-    def askToJoin():
-        global joinButton
         try:
-            joinButton = WebDriverWait(driver, 10).until(when.element_to_be_clickable((by.XPATH, joinButton2Path)))
+            joinButton = WebDriverWait(driver, 2).until(when.element_to_be_clickable((by.XPATH, joinButton2Path)))
+            break
         except Exception:
             pass
-
-    join1 = threading.Thread(target=join)
-    join2 = threading.Thread(target=askToJoin)
-    join1.setDaemon(True)
-    join2.setDaemon(True)
-    join1.start()
-    join2.start()
 
     if BROWSER_DRIVER.lower().startswith("chrome"):
         micBlockButton = driver.find_element_by_xpath(micBlockPath)
@@ -263,7 +255,6 @@ def attendMeet(link):
 
     time.sleep(1)
     while True:
-        global joinButton
         try:
             joinButton.click()
             break
@@ -298,8 +289,12 @@ def attendMeet(link):
 
 # To exit the meeting after ending
 def endMeet():
-    list = driver.find_element_by_xpath(listButtonCrossPath)
-    list.click()
+    try:
+        listCrossButton = driver.find_element_by_xpath(listButtonCrossPath)
+        listCrossButton.click()
+    except Exception:
+        listButton = driver.find_element_by_xpath(listButtonPath)
+        listButton.click()
     time.sleep(1)
     endButton = driver.find_element_by_css_selector(endButtonPath)
     endButton.click()
@@ -497,7 +492,13 @@ def showSchedule():
     clrscr()
     if len(MEET_LINK) > 0:
         for index, link in enumerate(MEET_LINK):
-            print(colored(f"    {index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
+            currentTime = list(map(int, str(datetime.datetime.now()).split()[1].split('.')[0].split(':')))
+            sleepTime = (int(link.split()[1].split(':')[0]) - currentTime[0])*3600 + (int(link.split()[1].split(':')[1]) - currentTime[1])*60 + (int(link.split()[1].split(':')[2]) - currentTime[2])
+            if sleepTime >= 0:
+                print(colored(f"    {index+1}) {link.split()[0]} at {link.split()[1]}", 'cyan'))
+            else:
+                print(colored(f"    {index+1}) {link.split()[0]} at {link.split()[1]}, waiting for someone to join", 'red'))
+
     else:
         print(colored("    No meetings scheduled currently", 'yellow'))
     input(colored("\n\n    > [Press Enter to go back to the main menu] ", 'green'))
