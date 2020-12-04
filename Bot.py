@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.6.5"
+currentVersion = "v3.6.6"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -264,19 +264,18 @@ def attendMeet(link):
     print(colored("    Success!", 'green'))
     time.sleep(1)
 
-    try:
-        joinButton = wait.until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))   # For another prompt that pops up for Meets being recorded
-        time.sleep(1)
-        joinButton.click()
-    except:
-        pass
-
     while True:
         try:
             listButton = driver.find_element_by_xpath(listButtonPath)
             listButton.click()
             break
         except Exception:
+            try:
+                joinButton = driver.find_element_by_xpath(joinButton1Path)
+                time.sleep(1)
+                joinButton.click()
+            except Exception: 
+                pass
             time.sleep(1)
 
     print(colored("\n    Now attending Google Meet", 'green'))
