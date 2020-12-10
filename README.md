@@ -64,7 +64,7 @@ A cross-platform super dope tool that attends Google Meet meetings for you while
    python3 Bot.py
    ```
 
-4. [Note] Make sure you have either Chrome or Firefox installed
+4. [Note] Make sure you have either Chrome or Firefox installed and a good internet connection.
 
 ## Tips to use MeetGod Easily and Efficiently
 
