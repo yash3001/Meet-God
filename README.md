@@ -16,7 +16,7 @@
 
 A cross-platform super dope tool that attends Google Meet meetings for you while you are sleeping or doing some other work. MeetGod handles everything for you flawlessly
 
-![demo](images/demo-1.jpeg)
+![demo](images/demo-1.png)
 
 ## Features
 
