@@ -38,8 +38,8 @@ BROWSER_DRIVER = ""
 #   Windows (x32): "FirefoxDrivers/win32/geckodriver.exe"   #
 #   Windows (x64): "FirefoxDrivers/win64/geckodriver.exe"   #
 #############################################################
-MEET_SLEEP_TIME = 1200
-END_PARTICIPANTS = 20
+MEET_SLEEP_TIME = 1200    # Bot will sleep for this number of seconds after joining meet
+END_PARTICIPANTS = 20     # Bot will leave the meeting when participants left are less than this number
     
 STATUS = "Starting"
 MENU1 = colored("""
