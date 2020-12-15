@@ -22,7 +22,7 @@ currentVersion = "v3.6.6"
 # Change these three variables to avoid typing again and again
 USERNAME = ""
 PASSWORD = ""
-MEET_LINK = []
+MEET_LINK = [""]
 BROWSER_DRIVER = ""
 # Choose the browser driver from the list below
 #############################################################
@@ -83,7 +83,9 @@ BANNER = BANNER1 + "\n" + BANNER2 + "\n"
 VERSION_CHECK_URL = "https://raw.githubusercontent.com/yash3001/Meet-God/master/version.txt"
 
 meetProcessAlive = False
-    
+
+stackOverflowLogInPath = "//a[contains(text(), 'Log in')]"
+stackOverflowGoogleSignInPath = "//button[@data-provider='google']"
 usernameFieldPath = "identifierId"
 usernameNextButtonPath = "identifierNext"
 passwordFieldPath = "password"
@@ -185,27 +187,37 @@ def initBrowser():
 def login():
     clrscr()
     print("    Logging into Google account... ")
-    driver.get('https://accounts.google.com/signin')
 
+    driver.get('https://stackoverflow.com/')
+    loginField = wait.until(when.element_to_be_clickable((by.XPATH, stackOverflowLogInPath)))
+    time.sleep(0.5)
+    loginField.click()
+    googleSignInField = wait.until(when.element_to_be_clickable((by.XPATH, stackOverflowGoogleSignInPath)))
+    time.sleep(0.5)
+    googleSignInField.click()
+    
     # global USERNAME, PASSWORD
     # USERNAME = input("Enter your email address: ") if USERNAME == "" else USERNAME
     # PASSWORD = getpass.getpass("Enter your password: ") if PASSWORD == "" else PASSWORD
 
     usernameField = wait.until(when.element_to_be_clickable((by.ID, usernameFieldPath)))
-    time.sleep(1)
+    time.sleep(0.5)
     usernameField.send_keys(USERNAME)
 
     usernameNextButton = wait.until(when.element_to_be_clickable((by.ID, usernameNextButtonPath)))
     usernameNextButton.click()
 
     passwordField = wait.until(when.element_to_be_clickable((by.NAME, passwordFieldPath)))
-    time.sleep(1)
+    time.sleep(0.5)
     passwordField.send_keys(PASSWORD)
 
     passwordNextButton = wait.until(when.element_to_be_clickable((by.ID, passwordNextButtonPath)))
     passwordNextButton.click()
 
-    time.sleep(3)
+    time.sleep(0.5)
+    driver.get("https://accounts.google.com/")
+    
+    time.sleep(2)
     print(colored("    Success!", 'green'))
     time.sleep(1)
 
