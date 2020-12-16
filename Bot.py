@@ -22,7 +22,7 @@ currentVersion = "v3.6.6"
 # Change these three variables to avoid typing again and again
 USERNAME = ""
 PASSWORD = ""
-MEET_LINK = [""]
+MEET_LINK = []
 BROWSER_DRIVER = ""
 # Choose the browser driver from the list below
 #############################################################
@@ -214,10 +214,9 @@ def login():
     passwordNextButton = wait.until(when.element_to_be_clickable((by.ID, passwordNextButtonPath)))
     passwordNextButton.click()
 
-    time.sleep(0.5)
+    time.sleep(2)
     driver.get("https://accounts.google.com/")
     
-    time.sleep(2)
     print(colored("    Success!", 'green'))
     time.sleep(1)
 
