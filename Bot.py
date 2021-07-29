@@ -17,7 +17,7 @@ import re; import requests
 ####### Global Variables #######
 ################################
 
-currentVersion = "v3.6.6"
+currentVersion = "v4.0.0"
 
 # Change these three variables to avoid typing again and again
 USERNAME = ""
@@ -93,9 +93,9 @@ cameraBlockPath = "//div[@aria-label='Turn off camera (ctrl + e)']"
 joinButton1Path = "//span[contains(text(), 'Join')]"
 statusPath = "//div[@role='status']"
 joinButton2Path = "//span[contains(text(), 'Ask to join')]"
-listButtonPath = "//div[@aria-label='Chat with everyone']"
+listButtonPath = "//button[@aria-label='Chat with everyone']"
 listButtonCrossPath = "//button[@aria-label='Close']"
-studentNumberPath = "//span[@class='rua5Nb']"
+studentNumberPath = "//div[@class='uGOf1d']"
 endButtonPath = "[aria-label='Leave call']"
 
 e = threading.Event()
@@ -340,17 +340,17 @@ def attendProcess():
             while True:
                 if meetProcessAlive:
                     try:
-                        numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
+                        numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('innerHTML')
                     except Exception:
                         try:
                             listButton = driver.find_element_by_xpath(listButtonPath)
                             listButton.click()
                             time.sleep(1)
-                            numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('textContent')
+                            numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('innerHTML')
                         except Exception:
                             time.sleep(2)
                             continue
-                    numPeople = int(str(numPeople[1:-1]))
+                    numPeople = int(str(numPeople[0:-1]))
                     if numPeople < END_PARTICIPANTS:
                         endMeet()
                         break
