@@ -34,7 +34,8 @@ BROWSER_DRIVER = ""
 #                   Mozilla Firefox                         #
 #     Linux (x32): "FirefoxDrivers/linux32/geckodriver"     #
 #     Linux (x64): "FirefoxDrivers/linux64/geckodriver"     #
-#             Mac: "FirefoxDrivers/mac64/geckodriver"       #
+#       Mac (x32): "FirefoxDrivers/mac64/geckodriver"       #
+#       Mac (x64): "FirefoxDrivers/mac32/geckodriver"       #
 #   Windows (x32): "FirefoxDrivers/win32/geckodriver.exe"   #
 #   Windows (x64): "FirefoxDrivers/win64/geckodriver.exe"   #
 #############################################################
