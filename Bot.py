@@ -88,15 +88,16 @@ usernameFieldPath = "identifierId"
 usernameNextButtonPath = "identifierNext"
 passwordFieldPath = "password"
 passwordNextButtonPath = "passwordNext"
-micBlockPath = "//div[@aria-label='Turn off microphone (ctrl + d)']"
-cameraBlockPath = "//div[@aria-label='Turn off camera (ctrl + e)']"
-joinButton1Path = "//span[contains(text(), 'Join')]"
+micBlockPath = "//div[@aria-label='Turn on microphone (ctrl + d)']"
+cameraBlockPath = "//div[@aria-label='Turn on camera (ctrl + e)']"
+joinButton1Path = "//span[contains(text(), 'Join now')]"
 statusPath = "//div[@role='status']"
 joinButton2Path = "//span[contains(text(), 'Ask to join')]"
 listButtonPath = "//button[@aria-label='Chat with everyone']"
 listButtonCrossPath = "//button[@aria-label='Close']"
 studentNumberPath = "//div[@class='uGOf1d']"
 endButtonPath = "[aria-label='Leave call']"
+dismissPath = "//button[@class='VfPpkd-LgbsSe VfPpkd-LgbsSe-OWXEXe-dgl2Hf ksBjEc lKxP2d qfvgSe AjXHhf']"
 
 e = threading.Event()
 
@@ -124,7 +125,7 @@ def versionCheck():
         time.sleep(3)
     elif currentVersion < latestVersion:
         print(colored("\n    You are using an older version of MeetGod.", "red"))
-        print(colored("    Get the latest version at https://raw.githubusercontent.com/yash3001/Meet-God/master/version.txt", "yellow"))
+        print(colored("    Get the latest version at https://github.com/yash3001/Meet-God", "yellow"))
         print(colored("    Every new version comes with fixes, improvements, new features, etc..", "yellow"))
         time.sleep(7)
 
@@ -153,18 +154,16 @@ def initBrowser():
         driver = webdriver.Chrome(executable_path=BROWSER_DRIVER, options=chromeOptions)
     
     elif BROWSER_DRIVER.lower().startswith("firefox"):
-        firefoxOptions = webdriver.FirefoxOptions()
+        firefoxOptions = webdriver.firefox.options.Options()
         firefoxOptions.add_argument("--width=800"), firefoxOptions.add_argument("--height=800")
-        # firefoxOptions.headless = True
+        firefoxOptions.headless = False
         firefoxOptions.set_preference("layers.acceleration.disabled", True)
         firefoxOptions.set_preference("browser.privatebrowsing.autostart", True)
         firefoxOptions.set_preference("permissions.default.microphone", 2)
         firefoxOptions.set_preference("permissions.default.camera", 2)
+        firefoxOptions.set_preference("media.volume_scale", "0.0")
     
-        firefoxProfile = webdriver.FirefoxProfile()
-        firefoxProfile.set_preference("media.volume_scale", "0.0")
-    
-        driver = webdriver.Firefox(executable_path=BROWSER_DRIVER, options=firefoxOptions, firefox_profile=firefoxProfile)
+        driver = webdriver.Firefox(service=webdriver.firefox.service.Service(BROWSER_DRIVER), options=firefoxOptions)
     
     elif len(BROWSER_DRIVER) == 0:
         print(colored("\n    Please enter the driver path in the source code\n    Exiting...", 'red'))
@@ -221,15 +220,21 @@ def attendMeet(link):
 
     while True:
         try:
+            try:
+                dismissButton = WebDriverWait(driver, 2).until(when.element_to_be_clickable((by.XPATH, dismissPath)))
+                dismissButton.click()
+            except Exception:
+                pass
+
             joinButton = WebDriverWait(driver, 2).until(when.element_to_be_clickable((by.XPATH, joinButton1Path)))
-            status = driver.find_element_by_xpath(statusPath).get_attribute('textContent')
+            status = driver.find_element("xpath", statusPath).get_attribute('textContent')
             if status == "No one else is here":
                 print(colored("\n    No one is in the meeting, sleeping for 5 minutes for the last time then skipping", 'red'))
                 time.sleep(5)
                 clrscr()
                 print(MENU, end="")
                 time.sleep(300)
-                status = driver.find_element_by_xpath(statusPath).get_attribute('textContent')
+                status = driver.find_element("xpath", statusPath).get_attribute('textContent')
                 if status == "No one else is here":
                     clrscr()
                     print(colored("\n    Omiting the current meeting because of timout error", 'red'))
@@ -246,8 +251,8 @@ def attendMeet(link):
             pass
 
     if BROWSER_DRIVER.lower().startswith("chrome"):
-        micBlockButton = driver.find_element_by_xpath(micBlockPath)
-        cameraBlockButton = driver.find_element_by_xpath(cameraBlockPath)
+        micBlockButton = driver.find_element("xpath", micBlockPath)
+        cameraBlockButton = driver.find_element("xpath", cameraBlockPath)
         time.sleep(0.5)
         cameraBlockButton.click()
         time.sleep(0.5)
@@ -266,12 +271,12 @@ def attendMeet(link):
 
     while True:
         try:
-            listButton = driver.find_element_by_xpath(listButtonPath)
+            listButton = driver.find_element("xpath", listButtonPath)
             listButton.click()
             break
         except Exception:
             try:
-                joinButton = driver.find_element_by_xpath(joinButton1Path)
+                joinButton = driver.find_element("xpath", joinButton1Path)
                 time.sleep(1)
                 joinButton.click()
             except Exception: 
@@ -289,13 +294,13 @@ def attendMeet(link):
 # To exit the meeting after ending
 def endMeet():
     try:
-        listCrossButton = driver.find_element_by_xpath(listButtonCrossPath)
+        listCrossButton = driver.find_element("xpath", listButtonCrossPath)
         listCrossButton.click()
     except Exception:
-        listButton = driver.find_element_by_xpath(listButtonPath)
+        listButton = driver.find_element("xpath", listButtonPath)
         listButton.click()
     time.sleep(1)
-    endButton = driver.find_element_by_css_selector(endButtonPath)
+    endButton = driver.find_element("css selector", endButtonPath)
     endButton.click()
     clrscr()
     print(colored("\n    Successfully ended Google Meet", 'green'))
@@ -340,17 +345,17 @@ def attendProcess():
             while True:
                 if meetProcessAlive:
                     try:
-                        numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('innerHTML')
+                        numPeople = driver.find_element("xpath", studentNumberPath).get_attribute('innerHTML')
                     except Exception:
                         try:
-                            listButton = driver.find_element_by_xpath(listButtonPath)
+                            listButton = driver.find_element("xpath", listButtonPath)
                             listButton.click()
                             time.sleep(1)
-                            numPeople = driver.find_element_by_xpath(studentNumberPath).get_attribute('innerHTML')
+                            numPeople = driver.find_element("xpath", studentNumberPath).get_attribute('innerHTML')
                         except Exception:
                             time.sleep(2)
                             continue
-                    numPeople = int(str(numPeople[0:-1]))
+                    numPeople = int(str(numPeople))
                     if numPeople < END_PARTICIPANTS:
                         endMeet()
                         break
