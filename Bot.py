@@ -777,16 +777,16 @@ if __name__ == "__main__":
         time.sleep(3)
         clrscrAll()
 
-    # except Exception:
-    #     print(colored("    An error occured", 'red'))
-    #     print(colored("    Press Enter to exit.", 'red'))
-    #     input()
-    #     print(colored("    Cleaning up and exiting...", 'red'))
-    #     try:
-    #         driver.quit()
-    #     except Exception:
-    #         pass
-    #     meetProcessAlive = False
-    #     e.set()
-    #     time.sleep(3)
-    #     clrscrAll()
+    except Exception:
+        print(colored("    An error occured", 'red'))
+        print(colored("    Press Enter to exit.", 'red'))
+        input()
+        print(colored("    Cleaning up and exiting...", 'red'))
+        try:
+            driver.quit()
+        except Exception:
+            pass
+        meetProcessAlive = False
+        e.set()
+        time.sleep(3)
+        clrscrAll()
