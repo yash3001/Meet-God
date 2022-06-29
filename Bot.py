@@ -137,7 +137,7 @@ def initBrowser():
     print("    Initializing browser... ")
 
     if BROWSER_DRIVER.lower().startswith("chrome"):
-        chromeOptions = webdriver.ChromeOptions()
+        chromeOptions = webdriver.chrome.options.Options()
         chromeOptions.add_argument("--disable-infobars")
         chromeOptions.add_argument("--disable-gpu")
         chromeOptions.add_argument("--disable-extensions")
@@ -152,8 +152,9 @@ def initBrowser():
         #                                                 "profile.default_content_setting_values.notifications": 1
         #                                                 })
 
-        driver = webdriver.Chrome(executable_path=BROWSER_DRIVER, options=chromeOptions)
+        driver = webdriver.Chrome(service=webdriver.chrome.service.Service(BROWSER_DRIVER), options=chromeOptions)
     
+
     elif BROWSER_DRIVER.lower().startswith("firefox"):
         firefoxOptions = webdriver.firefox.options.Options()
         firefoxOptions.add_argument("--width=800"), firefoxOptions.add_argument("--height=800")

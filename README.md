@@ -74,8 +74,8 @@ Even though everything will be taken care when the Bot.py is executed, still her
 2. Enter your password in the `PASSWORD` variable on line 24
 3. Enter the meet link and the time to join the meet(in 24 hour format) as one string in the list variable `MEET_LINK` on line 25. For example: `MEET_LINK = ["https://meet.google.com/uza-jkad-qwe 10:30:00", "https://meet.google.com/qwe-dsds-fio 16:00:00"]`
 4. Choose the browser driver based on your system and browser and put it in the `BROWSER_DRIVER` variable on line 26 (Take help from the list given below the variable)
-5. By default the bot sleeps for 20 mins after entering the meeting and then starts checking if the meeting has ended. You can change the default sleeping time by changing the `MEET_SLEEP_TIME` variable on line 41. (By default 1200secs = 20mins)
-6. After the bot finishes sleeping for the certain amount of time as mentioned in the above point, it regularly checks for the number of participants in the meetings and leaves when their number is less than a particular value (20 by default). You can change this value by changing the varibale `END_PARTICIPANTS` on line 42
+5. By default the bot sleeps for 20 mins after entering the meeting and then starts checking if the meeting has ended. You can change the default sleeping time by changing the `MEET_SLEEP_TIME` variable on line 42. (By default 1200secs = 20mins)
+6. After the bot finishes sleeping for the certain amount of time as mentioned in the above point, it regularly checks for the number of participants in the meetings and leaves when their number is less than a particular value (20 by default). You can change this value by changing the varibale `END_PARTICIPANTS` on line 43
 
 ![substitution](images/substitutes.png)
 
